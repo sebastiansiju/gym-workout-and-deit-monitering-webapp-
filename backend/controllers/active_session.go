@@ -2,9 +2,7 @@ package controllers
 
 import (
 	"database/sql"
-	"time"
 
-	"github.com/Cawlumm/lyftr-backend/db"
 	"github.com/Cawlumm/lyftr-backend/middleware"
 	"github.com/Cawlumm/lyftr-backend/utils"
 	"github.com/gin-gonic/gin"
@@ -12,17 +10,12 @@ import (
 
 func (h *Handler) GetActiveSession(c *gin.Context) {
 	uid := middleware.UserID(c)
-	var data string
-	var updatedAt time.Time
-	err := db.DB.QueryRow(
-		`SELECT data, updated_at FROM active_sessions WHERE user_id = ?`, uid,
-	).Scan(&data, &updatedAt)
+	data, updatedAt, err := h.s.ActiveSession.Get(uid)
 	if err == sql.ErrNoRows {
 		utils.OK(c, nil)
 		return
 	}
-	if err != nil {
-		utils.InternalError(c)
+	if utils.DBError(c, err) {
 		return
 	}
 	c.JSON(200, gin.H{"data": gin.H{"data": data, "updated_at": updatedAt}})
@@ -37,14 +30,7 @@ func (h *Handler) UpsertActiveSession(c *gin.Context) {
 		utils.BadRequest(c, err.Error())
 		return
 	}
-	_, err := db.DB.Exec(
-		`INSERT INTO active_sessions (user_id, data, updated_at)
-		 VALUES (?, ?, CURRENT_TIMESTAMP)
-		 ON CONFLICT(user_id) DO UPDATE SET data = excluded.data, updated_at = CURRENT_TIMESTAMP`,
-		uid, body.Data,
-	)
-	if err != nil {
-		utils.InternalError(c)
+	if utils.DBError(c, h.s.ActiveSession.Upsert(uid, body.Data)) {
 		return
 	}
 	utils.OK(c, gin.H{"saved": true})
@@ -52,6 +38,8 @@ func (h *Handler) UpsertActiveSession(c *gin.Context) {
 
 func (h *Handler) DeleteActiveSession(c *gin.Context) {
 	uid := middleware.UserID(c)
-	db.DB.Exec(`DELETE FROM active_sessions WHERE user_id = ?`, uid)
+	if utils.DBError(c, h.s.ActiveSession.Delete(uid)) {
+		return
+	}
 	utils.OK(c, gin.H{"deleted": true})
 }
