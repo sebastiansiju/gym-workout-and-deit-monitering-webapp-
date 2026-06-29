@@ -29,3 +29,32 @@ func New(db *sql.DB) *Stores {
 		Program:       NewProgramStore(db),
 	}
 }
+
+// inTx runs fn inside a transaction, committing on success and rolling back on
+// error. Use it for any store operation that issues two or more statements that
+// must commit as a unit (read-modify-write, or multiple writes). Single-statement
+// operations are already atomic and must NOT use it.
+func inTx[T any](db *sql.DB, fn func(*sql.Tx) (T, error)) (T, error) {
+	var zero T
+	tx, err := db.Begin()
+	if err != nil {
+		return zero, err
+	}
+	defer tx.Rollback() // no-op once Commit succeeds
+	v, err := fn(tx)
+	if err != nil {
+		return zero, err
+	}
+	if err := tx.Commit(); err != nil {
+		return zero, err
+	}
+	return v, nil
+}
+
+// inTxDo is inTx for operations that don't return a value.
+func inTxDo(db *sql.DB, fn func(*sql.Tx) error) error {
+	_, err := inTx(db, func(tx *sql.Tx) (struct{}, error) {
+		return struct{}{}, fn(tx)
+	})
+	return err
+}

@@ -96,24 +96,21 @@ func (s *ProgramStore) get(id int64) (models.Program, error) {
 }
 
 func (s *ProgramStore) Create(uid int64, req models.CreateProgramRequest) (models.Program, error) {
-	tx, err := s.db.Begin()
+	pid, err := inTx(s.db, func(tx *sql.Tx) (int64, error) {
+		res, err := tx.Exec(`INSERT INTO programs (user_id, name, notes) VALUES (?, ?, ?)`, uid, req.Name, req.Notes)
+		if err != nil {
+			return 0, err
+		}
+		pid, err := res.LastInsertId()
+		if err != nil {
+			return 0, err
+		}
+		if err := insertProgramExercises(tx, pid, req.Exercises); err != nil {
+			return 0, err
+		}
+		return pid, nil
+	})
 	if err != nil {
-		return models.Program{}, err
-	}
-	defer tx.Rollback()
-
-	res, err := tx.Exec(`INSERT INTO programs (user_id, name, notes) VALUES (?, ?, ?)`, uid, req.Name, req.Notes)
-	if err != nil {
-		return models.Program{}, err
-	}
-	pid, err := res.LastInsertId()
-	if err != nil {
-		return models.Program{}, err
-	}
-	if err := insertProgramExercises(tx, pid, req.Exercises); err != nil {
-		return models.Program{}, err
-	}
-	if err := tx.Commit(); err != nil {
 		return models.Program{}, err
 	}
 	return s.get(pid)
@@ -122,27 +119,19 @@ func (s *ProgramStore) Create(uid int64, req models.CreateProgramRequest) (model
 // Update replaces a user-owned program and its children in one tx. sql.ErrNoRows
 // if the program isn't theirs (nothing is mutated).
 func (s *ProgramStore) Update(uid, id int64, req models.CreateProgramRequest) (models.Program, error) {
-	var ownedID int64
-	if err := s.db.QueryRow(`SELECT id FROM programs WHERE id = ? AND user_id = ?`, id, uid).Scan(&ownedID); err != nil {
-		return models.Program{}, err
-	}
-
-	tx, err := s.db.Begin()
-	if err != nil {
-		return models.Program{}, err
-	}
-	defer tx.Rollback()
-
-	if _, err := tx.Exec(`UPDATE programs SET name = ?, notes = ? WHERE id = ?`, req.Name, req.Notes, id); err != nil {
-		return models.Program{}, err
-	}
-	if _, err := tx.Exec(`DELETE FROM program_exercises WHERE program_id = ?`, id); err != nil {
-		return models.Program{}, err
-	}
-	if err := insertProgramExercises(tx, id, req.Exercises); err != nil {
-		return models.Program{}, err
-	}
-	if err := tx.Commit(); err != nil {
+	if err := inTxDo(s.db, func(tx *sql.Tx) error {
+		var ownedID int64
+		if err := tx.QueryRow(`SELECT id FROM programs WHERE id = ? AND user_id = ?`, id, uid).Scan(&ownedID); err != nil {
+			return err
+		}
+		if _, err := tx.Exec(`UPDATE programs SET name = ?, notes = ? WHERE id = ?`, req.Name, req.Notes, id); err != nil {
+			return err
+		}
+		if _, err := tx.Exec(`DELETE FROM program_exercises WHERE program_id = ?`, id); err != nil {
+			return err
+		}
+		return insertProgramExercises(tx, id, req.Exercises)
+	}); err != nil {
 		return models.Program{}, err
 	}
 	return s.get(id)

@@ -86,41 +86,38 @@ func dayBounds(t time.Time) (time.Time, time.Time) {
 // entry if present, else insert. req.LoggedAt must already be normalized to UTC.
 func (s *WeightStore) UpsertForDay(uid int64, req models.LogWeightRequest) (models.WeightLog, error) {
 	dayStart, dayEnd := dayBounds(req.LoggedAt)
-	// One transaction so the existence check + insert/update is atomic: otherwise
-	// the connection is released between the SELECT and the write, and two same-day
-	// logs can both miss the row and both insert (duplicate day).
-	tx, err := s.db.Begin()
+	// Atomic check-then-write: without the transaction the connection is released
+	// between the SELECT and the write, so two same-day logs could both miss the
+	// row and both insert (duplicate day).
+	id, err := inTx(s.db, func(tx *sql.Tx) (int64, error) {
+		var id int64
+		err := tx.QueryRow(
+			`SELECT id FROM weight_logs WHERE user_id = ? AND logged_at >= ? AND logged_at < ? ORDER BY id DESC LIMIT 1`,
+			uid, dayStart, dayEnd,
+		).Scan(&id)
+		switch err {
+		case nil:
+			if _, e := tx.Exec(
+				`UPDATE weight_logs SET weight = ?, notes = ?, logged_at = ? WHERE id = ?`,
+				req.Weight, req.Notes, req.LoggedAt, id,
+			); e != nil {
+				return 0, e
+			}
+		case sql.ErrNoRows:
+			res, e := tx.Exec(
+				`INSERT INTO weight_logs (user_id, weight, notes, logged_at) VALUES (?, ?, ?, ?)`,
+				uid, req.Weight, req.Notes, req.LoggedAt,
+			)
+			if e != nil {
+				return 0, e
+			}
+			id, _ = res.LastInsertId()
+		default:
+			return 0, err
+		}
+		return id, nil
+	})
 	if err != nil {
-		return models.WeightLog{}, err
-	}
-	defer tx.Rollback()
-
-	var id int64
-	err = tx.QueryRow(
-		`SELECT id FROM weight_logs WHERE user_id = ? AND logged_at >= ? AND logged_at < ? ORDER BY id DESC LIMIT 1`,
-		uid, dayStart, dayEnd,
-	).Scan(&id)
-	switch err {
-	case nil:
-		if _, e := tx.Exec(
-			`UPDATE weight_logs SET weight = ?, notes = ?, logged_at = ? WHERE id = ?`,
-			req.Weight, req.Notes, req.LoggedAt, id,
-		); e != nil {
-			return models.WeightLog{}, e
-		}
-	case sql.ErrNoRows:
-		res, e := tx.Exec(
-			`INSERT INTO weight_logs (user_id, weight, notes, logged_at) VALUES (?, ?, ?, ?)`,
-			uid, req.Weight, req.Notes, req.LoggedAt,
-		)
-		if e != nil {
-			return models.WeightLog{}, e
-		}
-		id, _ = res.LastInsertId()
-	default:
-		return models.WeightLog{}, err
-	}
-	if err := tx.Commit(); err != nil {
 		return models.WeightLog{}, err
 	}
 	return s.get(id)
@@ -129,21 +126,25 @@ func (s *WeightStore) UpsertForDay(uid int64, req models.LogWeightRequest) (mode
 // Update edits an entry the user owns (sql.ErrNoRows if not theirs), then drops
 // any other same-day entry so the day keeps a single entry. req.LoggedAt UTC.
 func (s *WeightStore) Update(uid, id int64, req models.LogWeightRequest) (models.WeightLog, error) {
-	res, err := s.db.Exec(
-		`UPDATE weight_logs SET weight = ?, notes = ?, logged_at = ? WHERE id = ? AND user_id = ?`,
-		req.Weight, req.Notes, req.LoggedAt, id, uid,
-	)
-	if err != nil {
-		return models.WeightLog{}, err
-	}
-	if n, _ := res.RowsAffected(); n == 0 {
-		return models.WeightLog{}, sql.ErrNoRows
-	}
-	dayStart, dayEnd := dayBounds(req.LoggedAt)
-	if _, err := s.db.Exec(
-		`DELETE FROM weight_logs WHERE user_id = ? AND id != ? AND logged_at >= ? AND logged_at < ?`,
-		uid, id, dayStart, dayEnd,
-	); err != nil {
+	// Atomic: the row update + the same-day dedup delete must commit together.
+	if err := inTxDo(s.db, func(tx *sql.Tx) error {
+		res, err := tx.Exec(
+			`UPDATE weight_logs SET weight = ?, notes = ?, logged_at = ? WHERE id = ? AND user_id = ?`,
+			req.Weight, req.Notes, req.LoggedAt, id, uid,
+		)
+		if err != nil {
+			return err
+		}
+		if n, _ := res.RowsAffected(); n == 0 {
+			return sql.ErrNoRows
+		}
+		dayStart, dayEnd := dayBounds(req.LoggedAt)
+		_, err = tx.Exec(
+			`DELETE FROM weight_logs WHERE user_id = ? AND id != ? AND logged_at >= ? AND logged_at < ?`,
+			uid, id, dayStart, dayEnd,
+		)
+		return err
+	}); err != nil {
 		return models.WeightLog{}, err
 	}
 	return s.get(id)

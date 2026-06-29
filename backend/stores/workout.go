@@ -98,27 +98,24 @@ func (s *WorkoutStore) get(id int64) (models.Workout, error) {
 }
 
 func (s *WorkoutStore) Create(uid int64, req models.CreateWorkoutRequest) (models.Workout, error) {
-	tx, err := s.db.Begin()
+	wid, err := inTx(s.db, func(tx *sql.Tx) (int64, error) {
+		res, err := tx.Exec(
+			`INSERT INTO workouts (user_id, name, notes, duration, started_at) VALUES (?, ?, ?, ?, ?)`,
+			uid, req.Name, req.Notes, req.Duration, req.StartedAt,
+		)
+		if err != nil {
+			return 0, err
+		}
+		wid, err := res.LastInsertId()
+		if err != nil {
+			return 0, err
+		}
+		if err := insertWorkoutExercises(tx, wid, req.Exercises); err != nil {
+			return 0, err
+		}
+		return wid, nil
+	})
 	if err != nil {
-		return models.Workout{}, err
-	}
-	defer tx.Rollback()
-
-	res, err := tx.Exec(
-		`INSERT INTO workouts (user_id, name, notes, duration, started_at) VALUES (?, ?, ?, ?, ?)`,
-		uid, req.Name, req.Notes, req.Duration, req.StartedAt,
-	)
-	if err != nil {
-		return models.Workout{}, err
-	}
-	wid, err := res.LastInsertId()
-	if err != nil {
-		return models.Workout{}, err
-	}
-	if err := insertWorkoutExercises(tx, wid, req.Exercises); err != nil {
-		return models.Workout{}, err
-	}
-	if err := tx.Commit(); err != nil {
 		return models.Workout{}, err
 	}
 	return s.get(wid)
@@ -127,31 +124,24 @@ func (s *WorkoutStore) Create(uid int64, req models.CreateWorkoutRequest) (model
 // Update replaces a user-owned workout and its children in one tx. sql.ErrNoRows
 // if the workout isn't theirs (nothing is mutated).
 func (s *WorkoutStore) Update(uid, id int64, req models.CreateWorkoutRequest) (models.Workout, error) {
-	var ownedID int64
-	if err := s.db.QueryRow(`SELECT id FROM workouts WHERE id = ? AND user_id = ?`, id, uid).Scan(&ownedID); err != nil {
-		return models.Workout{}, err // ErrNoRows = not theirs
-	}
-
-	tx, err := s.db.Begin()
-	if err != nil {
-		return models.Workout{}, err
-	}
-	defer tx.Rollback()
-
-	if _, err := tx.Exec(
-		`UPDATE workouts SET name = ?, notes = ?, duration = ?, started_at = ? WHERE id = ?`,
-		req.Name, req.Notes, req.Duration, req.StartedAt, id,
-	); err != nil {
-		return models.Workout{}, err
-	}
-	// Children replaced wholesale; sets cascade-delete with their workout_exercise.
-	if _, err := tx.Exec(`DELETE FROM workout_exercises WHERE workout_id = ?`, id); err != nil {
-		return models.Workout{}, err
-	}
-	if err := insertWorkoutExercises(tx, id, req.Exercises); err != nil {
-		return models.Workout{}, err
-	}
-	if err := tx.Commit(); err != nil {
+	// Ownership check + replace-children, all in one transaction (no TOCTOU).
+	if err := inTxDo(s.db, func(tx *sql.Tx) error {
+		var ownedID int64
+		if err := tx.QueryRow(`SELECT id FROM workouts WHERE id = ? AND user_id = ?`, id, uid).Scan(&ownedID); err != nil {
+			return err // ErrNoRows = not theirs
+		}
+		if _, err := tx.Exec(
+			`UPDATE workouts SET name = ?, notes = ?, duration = ?, started_at = ? WHERE id = ?`,
+			req.Name, req.Notes, req.Duration, req.StartedAt, id,
+		); err != nil {
+			return err
+		}
+		// Children replaced wholesale; sets cascade-delete with their workout_exercise.
+		if _, err := tx.Exec(`DELETE FROM workout_exercises WHERE workout_id = ?`, id); err != nil {
+			return err
+		}
+		return insertWorkoutExercises(tx, id, req.Exercises)
+	}); err != nil {
 		return models.Workout{}, err
 	}
 	return s.get(id)

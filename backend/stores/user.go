@@ -61,24 +61,17 @@ func (s *UserStore) UpsertSettings(uid int64, req models.UpdateSettingsRequest) 
 // fixes the previous non-transactional gap). A duplicate email surfaces as a
 // UNIQUE violation for the controller to map to 409.
 func (s *UserStore) Create(email, hash string) (int64, error) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		return 0, err
-	}
-	defer tx.Rollback()
-
-	res, err := tx.Exec(`INSERT INTO users (email, password_hash) VALUES (?, ?)`, email, hash)
-	if err != nil {
-		return 0, err
-	}
-	uid, _ := res.LastInsertId()
-	if _, err := tx.Exec(`INSERT INTO user_settings (user_id) VALUES (?)`, uid); err != nil {
-		return 0, err
-	}
-	if err := tx.Commit(); err != nil {
-		return 0, err
-	}
-	return uid, nil
+	return inTx(s.db, func(tx *sql.Tx) (int64, error) {
+		res, err := tx.Exec(`INSERT INTO users (email, password_hash) VALUES (?, ?)`, email, hash)
+		if err != nil {
+			return 0, err
+		}
+		uid, _ := res.LastInsertId()
+		if _, err := tx.Exec(`INSERT INTO user_settings (user_id) VALUES (?)`, uid); err != nil {
+			return 0, err
+		}
+		return uid, nil
+	})
 }
 
 // Delete removes the user; child rows go via ON DELETE CASCADE (foreign_keys=on).
