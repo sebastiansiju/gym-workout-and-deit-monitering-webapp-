@@ -137,6 +137,158 @@ func (s *ProgramStore) Update(uid, id int64, req models.CreateProgramRequest) (m
 	return s.get(id)
 }
 
+// ProgressInput is one logged working set to consider for auto-progression:
+// the routine set it came from, what the user logged, and whether that logged set
+// was also an all-time best (computed by the controller from a pre-save PR snapshot).
+type ProgressInput struct {
+	ProgramSetID int64
+	Weight       float64
+	Reps         int
+	IsPR         bool
+}
+
+// SuggestTargets stages (does NOT apply) a per-set target suggestion for each set the
+// user beat this workout (issue #40). The user later approves them on the routine via
+// ResolveSuggestions. Upward only, per progressedTarget. Returns the routine name, how
+// many suggestions were staged, and whether any was an all-time PR (drives the 🏆
+// toast). If the program isn't the caller's, nothing is touched (name "", count 0, no
+// error): the ownership check + the pe.program_id join stop a client from staging onto
+// another user's routine by guessing set ids.
+func (s *ProgramStore) SuggestTargets(uid, programID int64, sets []ProgressInput) (string, int, bool, error) {
+	var name string
+	var count int
+	var anyPR bool
+	err := inTxDo(s.db, func(tx *sql.Tx) error {
+		var err error
+		name, count, anyPR, err = suggestTargetsTx(tx, uid, programID, sets)
+		return err
+	})
+	if err != nil {
+		return "", 0, false, err
+	}
+	return name, count, anyPR, nil
+}
+
+// suggestTargetsTx is SuggestTargets' body, scoped to an existing transaction so a
+// caller can serialize it with an earlier PR-snapshot read and workout insert (see
+// WorkoutStore.CreateWithProgression) — closes a TOCTOU race where two concurrent
+// workout submissions could both compute suggested_is_pr against the same stale prior
+// best (issue #40 progression review).
+func suggestTargetsTx(tx *sql.Tx, uid, programID int64, sets []ProgressInput) (string, int, bool, error) {
+	var name string
+	count, anyPR := 0, false
+	if err := tx.QueryRow(`SELECT name FROM programs WHERE id = ? AND user_id = ?`, programID, uid).Scan(&name); err != nil {
+		if err == sql.ErrNoRows {
+			return "", 0, false, nil // not the caller's program — no-op, not an error
+		}
+		return "", 0, false, err
+	}
+	for _, in := range sets {
+		var curReps int
+		var curWeight float64
+		var sugReps sql.NullInt64
+		var sugWeight sql.NullFloat64
+		// Re-assert the set belongs to THIS (already-owned) program before touching it.
+		err := tx.QueryRow(
+			`SELECT ps.target_reps, ps.target_weight, ps.suggested_reps, ps.suggested_weight
+			 FROM program_sets ps
+			 JOIN program_exercises pe ON pe.id = ps.program_exercise_id
+			 WHERE ps.id = ? AND pe.program_id = ?`,
+			in.ProgramSetID, programID,
+		).Scan(&curReps, &curWeight, &sugReps, &sugWeight)
+		if err == sql.ErrNoRows {
+			continue // set isn't in this routine anymore (edited/deleted) — skip
+		}
+		if err != nil {
+			return "", 0, false, err
+		}
+		// Compare against the best of (current target, any pending suggestion) so a
+		// smaller-but-still-over-target set can't downgrade an un-approved PR (#40 edge).
+		baseReps, baseWeight := curReps, curWeight
+		if sugReps.Valid {
+			baseReps = int(sugReps.Int64)
+		}
+		if sugWeight.Valid {
+			baseWeight = sugWeight.Float64
+		}
+		newWeight, newReps, improved := progressedTarget(baseWeight, baseReps, in.Weight, in.Reps)
+		if !improved {
+			continue
+		}
+		if _, err := tx.Exec(
+			`UPDATE program_sets SET suggested_weight = ?, suggested_reps = ?, suggested_is_pr = ? WHERE id = ?`,
+			newWeight, newReps, in.IsPR, in.ProgramSetID,
+		); err != nil {
+			return "", 0, false, err
+		}
+		count++
+		if in.IsPR {
+			anyPR = true
+		}
+	}
+	return name, count, anyPR, nil
+}
+
+// ResolveSuggestions applies (accept) or clears (dismiss) staged routine suggestions by
+// program_set id, then returns the refreshed program. Accepting copies suggested_* into
+// target_*; both paths clear the suggestion. Ownership-gated, and every id is re-scoped
+// to this program via the pe.program_id sub-select — the same IDOR guard as SuggestTargets,
+// so a client can't touch another user's routine by guessing ids.
+func (s *ProgramStore) ResolveSuggestions(uid, programID int64, accept, dismiss []int64) (models.Program, error) {
+	err := inTxDo(s.db, func(tx *sql.Tx) error {
+		var ownedID int64
+		if err := tx.QueryRow(`SELECT id FROM programs WHERE id = ? AND user_id = ?`, programID, uid).Scan(&ownedID); err != nil {
+			return err
+		}
+		owned := `AND program_exercise_id IN (SELECT id FROM program_exercises WHERE program_id = ?)`
+		for _, id := range accept {
+			if _, err := tx.Exec(
+				`UPDATE program_sets
+				 SET target_weight = COALESCE(suggested_weight, target_weight),
+				     target_reps   = COALESCE(suggested_reps, target_reps),
+				     suggested_weight = NULL, suggested_reps = NULL, suggested_is_pr = 0
+				 WHERE id = ? `+owned,
+				id, programID,
+			); err != nil {
+				return err
+			}
+		}
+		for _, id := range dismiss {
+			if _, err := tx.Exec(
+				`UPDATE program_sets
+				 SET suggested_weight = NULL, suggested_reps = NULL, suggested_is_pr = 0
+				 WHERE id = ? `+owned,
+				id, programID,
+			); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return models.Program{}, err
+	}
+	return s.get(programID)
+}
+
+// progressedTarget applies the upward-only progression rule for a single set and
+// reports whether the target changed: a heavier logged weight raises the weight
+// and adopts the reps done at it; the same weight with more reps raises the reps;
+// equal-or-lighter leaves the target untouched (a deload never lowers a routine).
+// eps absorbs float drift from unit conversion so an unchanged weight still counts
+// as "same" for the reps branch.
+func progressedTarget(curWeight float64, curReps int, logWeight float64, logReps int) (float64, int, bool) {
+	const eps = 1e-6
+	switch {
+	case logWeight > curWeight+eps:
+		return logWeight, logReps, true
+	case logWeight >= curWeight-eps && logReps > curReps:
+		return curWeight, logReps, true
+	default:
+		return curWeight, curReps, false
+	}
+}
+
 func (s *ProgramStore) Delete(uid, id int64) (int64, error) {
 	res, err := s.db.Exec(`DELETE FROM programs WHERE id = ? AND user_id = ?`, id, uid)
 	if err != nil {
@@ -221,7 +373,8 @@ func (s *ProgramStore) loadExercises(programID int64) ([]models.ProgramExercise,
 
 func (s *ProgramStore) loadSets(programExerciseID int64) ([]models.ProgramSet, error) {
 	rows, err := s.db.Query(
-		`SELECT id, program_exercise_id, set_number, target_reps, target_weight
+		`SELECT id, program_exercise_id, set_number, target_reps, target_weight,
+		        suggested_weight, suggested_reps, suggested_is_pr
 		 FROM program_sets WHERE program_exercise_id = ? ORDER BY set_number`,
 		programExerciseID,
 	)
@@ -232,8 +385,18 @@ func (s *ProgramStore) loadSets(programExerciseID int64) ([]models.ProgramSet, e
 	var sets []models.ProgramSet
 	for rows.Next() {
 		var st models.ProgramSet
-		if err := rows.Scan(&st.ID, &st.ProgramExerciseID, &st.SetNumber, &st.TargetReps, &st.TargetWeight); err != nil {
+		var sw sql.NullFloat64
+		var sr sql.NullInt64
+		if err := rows.Scan(&st.ID, &st.ProgramExerciseID, &st.SetNumber, &st.TargetReps, &st.TargetWeight,
+			&sw, &sr, &st.SuggestedIsPR); err != nil {
 			return nil, err
+		}
+		if sw.Valid {
+			st.SuggestedWeight = &sw.Float64
+		}
+		if sr.Valid {
+			r := int(sr.Int64)
+			st.SuggestedReps = &r
 		}
 		sets = append(sets, st)
 	}

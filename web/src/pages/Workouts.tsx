@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { format } from 'date-fns'
-import { Dumbbell, Plus, Clock, Search, AlertCircle, Edit2, Trash2, TrendingUp, ChevronRight, MoreVertical } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Dumbbell, Plus, Clock, Search, AlertCircle, Edit2, Trash2, TrendingUp, Award, ChevronRight, MoreVertical } from 'lucide-react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Loading from '../components/Loading'
 import EmptyState from '../components/ui/EmptyState'
 import PageHeader from '../components/ui/PageHeader'
+import { Toast } from '../components/ui'
 import { useServerInfiniteList } from '../hooks/useServerInfiniteList'
 import { workoutAPI } from '../services/api'
 import { useSettingsStore, weightShort, displayVolume } from '../stores/settings'
@@ -201,9 +202,23 @@ function WorkoutCard({ workout, onEdit, onDelete }: { workout: types.Workout; on
 
 export default function Workouts() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [error, setError] = useState<string | null>(null)
+
+  // Auto-progression toast (#40): the finish flow navigates here with the summary
+  // in router state. Capture it once, then wipe history state so it can't replay on
+  // back/refresh.
+  const [progression, setProgression] = useState<types.ProgressionResult | null>(
+    (location.state as { progression?: types.ProgressionResult } | null)?.progression ?? null
+  )
+  useEffect(() => {
+    if ((location.state as { progression?: types.ProgressionResult } | null)?.progression) {
+      window.history.replaceState({}, '')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Debounce search so we don't fire a request on every keystroke
   useEffect(() => {
@@ -291,6 +306,16 @@ export default function Workouts() {
         )}
       </div>
 
+      {progression && (
+        <Toast
+          variant={progression.is_pr ? 'warning' : 'success'}
+          icon={progression.is_pr ? Award : TrendingUp}
+          title={progression.is_pr ? `New PR in ${progression.program_name}` : `New targets in ${progression.program_name}`}
+          description={`Tap to review ${progression.count} ${progression.count === 1 ? 'update' : 'updates'}`}
+          onClick={() => { setProgression(null); navigate(`/programs/${progression.program_id}`) }}
+          onDismiss={() => setProgression(null)}
+        />
+      )}
     </div>
   )
 }

@@ -4,12 +4,16 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import {
   ArrowLeft, BookOpen, Dumbbell, Edit2, Trash2, Play, AlertCircle, Loader, ChevronRight, Pause, TimerOff,
+  Award, TrendingUp, Check, X, ChevronDown, ChevronUp,
 } from 'lucide-react'
 import { programAPI } from '../services/api'
 import { useWorkoutSession } from '../stores/workoutSession'
 import { useSettingsStore, weightShort, displayWeight } from '../stores/settings'
 import * as types from '../types'
 import { muscleColor } from '../utils/exerciseUtils'
+
+// Rows shown before the review banner collapses behind a "Show all" toggle (#40).
+const SUGGESTION_CAP = 3
 
 export default function ProgramDetail() {
   const { id } = useParams<{ id: string }>()
@@ -24,6 +28,23 @@ export default function ProgramDetail() {
   const [error, setError] = useState<string | null>(null)
   const [confirming, setConfirming] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [resolving, setResolving] = useState(false)
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false)
+
+  // Accept (apply → target) or dismiss staged auto-progression suggestions (#40),
+  // then refresh from the returned program.
+  const resolveSuggestions = async (accept: number[], dismiss: number[]) => {
+    if (!program || resolving) return
+    setResolving(true)
+    try {
+      const updated = await programAPI.resolveSuggestions(program.id, { accept, dismiss })
+      setProgram(updated)
+    } catch {
+      /* leave the banner in place so the user can retry */
+    } finally {
+      setResolving(false)
+    }
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -54,6 +75,7 @@ export default function ProgramDetail() {
         actual_reps: s.target_reps,
         actual_weight: s.target_weight,
         completed: false,
+        program_set_id: s.id, // link for routine target auto-progression (#40)
       })),
     }))
     startSession(program.name, exercises, program.id)
@@ -96,6 +118,42 @@ export default function ProgramDetail() {
 
   const exs = program.exercises ?? []
   const totalSets = exs.reduce((s, ex) => s + (ex.sets ?? []).length, 0)
+
+  // Pending auto-progression suggestions (#40), flattened for the review banner. A
+  // suggestion exists when suggested_reps is set. Show the FULL reps×weight on both
+  // sides when both changed (a heavier set can also drop the rep target — the user
+  // must see that before approving), else the single changed dimension.
+  const suggestions = exs.flatMap(ex =>
+    (ex.sets ?? [])
+      .filter(s => s.id != null && s.suggested_reps != null)
+      .map(s => {
+        const sw = s.suggested_weight as number
+        const sr = s.suggested_reps as number
+        const weightChanged = s.suggested_weight != null && Math.abs(sw - s.target_weight) > 1e-6
+        const repsChanged = sr !== s.target_reps
+        const wLabel = (v: number) => (v > 0 ? `${displayWeight(v, wUnit)} ${wUnit}` : 'BW')
+        let oldLabel: string, newLabel: string
+        if (weightChanged && repsChanged) {
+          oldLabel = `${s.target_reps} × ${wLabel(s.target_weight)}`
+          newLabel = `${sr} × ${wLabel(sw)}`
+        } else if (weightChanged) {
+          oldLabel = wLabel(s.target_weight)
+          newLabel = wLabel(sw)
+        } else {
+          oldLabel = `${s.target_reps}`
+          newLabel = `${sr} reps`
+        }
+        return {
+          setId: s.id as number,
+          exName: ex.exercise?.name ?? 'Exercise',
+          setNumber: s.set_number,
+          isPR: !!s.suggested_is_pr,
+          oldLabel,
+          newLabel,
+        }
+      })
+  )
+  const suggestedSetIds = suggestions.map(s => s.setId)
 
   return (
     <div className="space-y-5 animate-slide-up max-w-2xl">
@@ -145,6 +203,76 @@ export default function ProgramDetail() {
           </div>
         </div>,
         document.body
+      )}
+
+      {/* Auto-progression review banner (#40) — approve the targets you beat last workout */}
+      {suggestions.length > 0 && (
+        <div className="bg-surface-raised border border-warning-500/30 rounded-xl overflow-hidden animate-slide-up">
+          <div className="flex items-center gap-2 px-4 py-3">
+            {suggestions.some(s => s.isPR)
+              ? <Award className="w-4 h-4 text-warning-400 flex-shrink-0" />
+              : <TrendingUp className="w-4 h-4 text-warning-400 flex-shrink-0" />}
+            <span className="text-sm font-semibold text-tx-primary flex-1">New targets from your last workout</span>
+            <span className="text-xs font-bold text-warning-400 bg-warning-500/15 px-2 py-0.5 rounded-full tabular-nums">{suggestions.length}</span>
+          </div>
+          {(showAllSuggestions ? suggestions : suggestions.slice(0, SUGGESTION_CAP)).map(sg => (
+            <div key={sg.setId} className="flex items-center gap-3 px-4 py-2.5 border-t border-surface-border/60">
+              <span className="text-sm text-tx-secondary min-w-0 flex-1 truncate flex items-center gap-1.5">
+                {sg.isPR && <Award className="w-3.5 h-3.5 text-warning-400 flex-shrink-0" />}
+                <span className="truncate"><span className="font-semibold text-tx-primary">{sg.exName}</span> · Set {sg.setNumber}</span>
+              </span>
+              <span className="text-sm tabular-nums whitespace-nowrap flex-shrink-0">
+                <span className="text-tx-muted line-through">{sg.oldLabel}</span>
+                <span className="text-warning-400 mx-1.5">→</span>
+                <span className="text-tx-primary font-bold">{sg.newLabel}</span>
+              </span>
+              <span className="flex gap-1.5 flex-shrink-0">
+                <button
+                  onClick={() => resolveSuggestions([sg.setId], [])}
+                  disabled={resolving}
+                  aria-label={`Accept ${sg.exName} set ${sg.setNumber}`}
+                  className="w-7 h-7 rounded-lg bg-success-500/15 text-success-400 hover:bg-success-500/25 disabled:opacity-50 flex items-center justify-center transition-colors"
+                >
+                  <Check className="w-4 h-4" strokeWidth={3} />
+                </button>
+                <button
+                  onClick={() => resolveSuggestions([], [sg.setId])}
+                  disabled={resolving}
+                  aria-label={`Dismiss ${sg.exName} set ${sg.setNumber}`}
+                  className="w-7 h-7 rounded-lg bg-surface-muted text-tx-muted hover:text-tx-primary disabled:opacity-50 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-4 h-4" strokeWidth={3} />
+                </button>
+              </span>
+            </div>
+          ))}
+          {suggestions.length > SUGGESTION_CAP && (
+            <button
+              onClick={() => setShowAllSuggestions(v => !v)}
+              className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-surface-border/60 text-warning-400 hover:text-warning-300 text-xs font-semibold transition-colors"
+            >
+              {showAllSuggestions
+                ? <>Show less <ChevronUp className="w-3.5 h-3.5" /></>
+                : <>Show all {suggestions.length} <ChevronDown className="w-3.5 h-3.5" /></>}
+            </button>
+          )}
+          <div className="flex gap-2 px-4 py-3 border-t border-surface-border/60">
+            <button
+              onClick={() => resolveSuggestions([], suggestedSetIds)}
+              disabled={resolving}
+              className="flex-1 py-2 rounded-lg bg-surface-muted border border-surface-border text-tx-secondary hover:text-tx-primary disabled:opacity-50 text-sm font-medium transition-colors"
+            >
+              Dismiss all
+            </button>
+            <button
+              onClick={() => resolveSuggestions(suggestedSetIds, [])}
+              disabled={resolving}
+              className="flex-1 py-2 rounded-lg bg-warning-500 hover:bg-warning-400 disabled:opacity-50 text-[#1a1400] text-sm font-semibold transition-colors"
+            >
+              Apply all ({suggestions.length})
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Header */}
@@ -242,9 +370,11 @@ export default function ProgramDetail() {
                   <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
                     {sets.map((set, i) => {
                       const isBest = set.target_weight === maxTargetLbs && maxTargetLbs > 0
+                      const hasSuggestion = set.suggested_reps != null
                       return (
                         <div key={i} className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold tabular-nums leading-none ${
-                          isBest ? 'bg-brand-500/15 text-brand-300 ring-1 ring-brand-500/25' : 'bg-surface-raised text-tx-secondary'
+                          hasSuggestion ? 'bg-warning-500/10 text-tx-secondary ring-1 ring-warning-500/40'
+                            : isBest ? 'bg-brand-500/15 text-brand-300 ring-1 ring-brand-500/25' : 'bg-surface-raised text-tx-secondary'
                         }`}>
                           {set.target_reps > 0 ? set.target_reps : '—'} × {set.target_weight > 0 ? `${displayWeight(set.target_weight, wUnit)} ${wUnit}` : 'BW'}
                         </div>

@@ -54,6 +54,29 @@ type Workout struct {
 	StartedAt time.Time         `json:"started_at" db:"started_at"`
 	CreatedAt time.Time         `json:"created_at" db:"created_at"`
 	Exercises []WorkoutExercise `json:"exercises,omitempty"`
+	// Progression is set in-memory on the create response when finishing this
+	// workout auto-progressed routine targets (issue #40). Never persisted.
+	Progression *ProgressionResult `json:"progression,omitempty"`
+}
+
+// ProgressionResult summarizes staged auto-progression for the finish toast: which
+// routine, how many per-set targets got a pending suggestion, and whether any was an
+// all-time PR (drives the 🏆 toast). Transient (issue #40).
+type ProgressionResult struct {
+	ProgramID   int64  `json:"program_id"`
+	ProgramName string `json:"program_name"`
+	Count       int    `json:"count"`
+	IsPR        bool   `json:"is_pr"`
+}
+
+// ResolveSuggestionsReq accepts or dismisses staged routine suggestions (#40) by
+// program_set id. Accepted ids copy suggested_* → target_*; both clear the suggestion.
+// max=500 bounds each list well above any plausible routine's set count — the store
+// loops one UPDATE per id inside a single transaction, so an unbounded list could hold
+// SQLite's writer lock for an extended period.
+type ResolveSuggestionsReq struct {
+	Accept  []int64 `json:"accept" validate:"max=500"`
+	Dismiss []int64 `json:"dismiss" validate:"max=500"`
 }
 
 type WorkoutExercise struct {
@@ -164,12 +187,31 @@ type RefreshRequest struct {
 	RefreshToken string `json:"refresh_token" validate:"required"`
 }
 
+// MaxWorkoutSets bounds the TOTAL number of sets across every exercise in a
+// CreateWorkoutRequest (sum of len(Exercises[i].Sets), not each list's own max=500
+// below independently) — enforced by the struct-level validation registered in
+// controllers/workouts.go's init(). Exercises/Sets each also carry their own
+// max=500 as a belt-and-suspenders per-list cap, but that alone doesn't bound their
+// product (500 exercises x 500 sets = 250,000 rows), which is what actually matters
+// since issue #40's CreateWorkoutWithProgression processes the whole request inside
+// one transaction holding the process's single SQLite connection
+// (db.DB.SetMaxOpenConns(1)) — see the total-sets check for why this constant, not
+// the per-list tags, is the real bound on that transaction's worst-case duration.
+const MaxWorkoutSets = 500
+
 type CreateWorkoutRequest struct {
 	Name      string                     `json:"name" validate:"required"`
 	Notes     string                     `json:"notes"`
 	Duration  int                        `json:"duration"`
 	StartedAt time.Time                  `json:"started_at"`
-	Exercises []CreateWorkoutExerciseReq `json:"exercises"`
+	// ProgramID is set when the workout was started from a routine — it enables
+	// per-set auto-progression of that routine's targets (issue #40). nil for
+	// freestyle/quick workouts, which never progress a routine.
+	ProgramID *int64                     `json:"program_id"`
+	// Exercises/Sets each cap at max=500 as an outer sanity bound, but that bounds
+	// each dimension independently, not their product — see MaxWorkoutSets above for
+	// the cap that actually matters.
+	Exercises []CreateWorkoutExerciseReq `json:"exercises" validate:"max=500,dive"`
 }
 
 type CreateWorkoutExerciseReq struct {
@@ -177,7 +219,7 @@ type CreateWorkoutExerciseReq struct {
 	OrderIndex  int            `json:"order_index"`
 	Notes       string         `json:"notes"`
 	RestSeconds int            `json:"rest_seconds"`
-	Sets        []CreateSetReq `json:"sets"`
+	Sets        []CreateSetReq `json:"sets" validate:"max=500"`
 }
 
 type CreateSetReq struct {
@@ -188,6 +230,10 @@ type CreateSetReq struct {
 	Distance  float64 `json:"distance"`
 	RPE       float64 `json:"rpe"`
 	IsWarmup  bool    `json:"is_warmup"`
+	// ProgramSetID links this logged set back to the routine set it came from, so
+	// auto-progression (issue #40) can bump exactly that target. nil for sets not
+	// sourced from a routine (freestyle, or ad-hoc sets added mid-workout).
+	ProgramSetID *int64 `json:"program_set_id"`
 }
 
 type LogWeightRequest struct {
@@ -260,6 +306,12 @@ type ProgramSet struct {
 	SetNumber         int     `json:"set_number"`
 	TargetReps        int     `json:"target_reps"`
 	TargetWeight      float64 `json:"target_weight"`
+	// Pending auto-progression suggestion (#40) — nil when none. The user approves
+	// it on the routine, which copies suggested_* into target_*. SuggestedIsPR marks
+	// the set as also an all-time best (drives the 🏆 flair).
+	SuggestedWeight *float64 `json:"suggested_weight,omitempty"`
+	SuggestedReps   *int     `json:"suggested_reps,omitempty"`
+	SuggestedIsPR   bool     `json:"suggested_is_pr,omitempty"`
 }
 
 type CreateProgramRequest struct {

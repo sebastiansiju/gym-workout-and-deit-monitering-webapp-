@@ -10,7 +10,27 @@ import (
 	"github.com/Cawlumm/lyftr-backend/stores"
 	"github.com/Cawlumm/lyftr-backend/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
+
+// Exercises/Sets in CreateWorkoutRequest each cap at max=500 independently (models.go),
+// which doesn't bound their product — a request with 500 exercises x 500 sets (250,000
+// rows) still passes those tags. This struct-level check enforces the total-sets bound
+// (models.MaxWorkoutSets) that CreateWorkoutWithProgression's single-transaction
+// processing actually needs, since db.DB.SetMaxOpenConns(1) means that transaction
+// holds the process's only SQLite connection for the whole request.
+func init() {
+	validate.RegisterStructValidation(func(sl validator.StructLevel) {
+		req := sl.Current().Interface().(models.CreateWorkoutRequest)
+		total := 0
+		for _, ex := range req.Exercises {
+			total += len(ex.Sets)
+		}
+		if total > models.MaxWorkoutSets {
+			sl.ReportError(req.Exercises, "Exercises", "Exercises", "maxtotalsets", "")
+		}
+	}, models.CreateWorkoutRequest{})
+}
 
 func (h *Handler) ListWorkouts(c *gin.Context) {
 	uid := middleware.UserID(c)
@@ -60,7 +80,11 @@ func (h *Handler) CreateWorkout(c *gin.Context) {
 	if req.StartedAt.IsZero() {
 		req.StartedAt = time.Now()
 	}
-	w, err := h.s.Workout.Create(uid, req)
+	// Snapshot, insert, and stage routine target suggestions in one transaction (issue
+	// #40) — closes a TOCTOU race where two concurrent submissions could both read the
+	// same stale prior best. Staging is still best-effort internally: a failure there
+	// never fails the already-saved workout.
+	w, progression, err := h.s.CreateWorkoutWithProgression(uid, req)
 	if utils.IsForeignKeyViolation(err) {
 		utils.BadRequest(c, "one or more exercises do not exist")
 		return
@@ -68,6 +92,7 @@ func (h *Handler) CreateWorkout(c *gin.Context) {
 	if utils.DBError(c, err) {
 		return
 	}
+	w.Progression = progression
 	utils.Created(c, w)
 }
 
