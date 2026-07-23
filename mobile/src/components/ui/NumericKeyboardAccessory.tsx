@@ -6,7 +6,7 @@ import { InputAccessoryView, Keyboard, Platform, Pressable, Text, View } from 'r
 // `inputAccessoryViewID={NUMERIC_ACCESSORY_ID}`, and mount <NumericKeyboardAccessory/>
 // once on the screen. Android keyboards already dismiss on back/return, and
 // InputAccessoryView is iOS-only, so this is a no-op off iOS.
-export const NUMERIC_ACCESSORY_ID = 'lyftr-numeric-done'
+export const NUMERIC_ACCESSORY_ID = 'sebu-numeric-done'
 
 export function NumericKeyboardAccessory() {
   if (Platform.OS !== 'ios') return null

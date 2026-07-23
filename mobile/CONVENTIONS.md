@@ -1,4 +1,4 @@
-# Lyftr Mobile — Conventions
+# Sebu Mobile — Conventions
 
 Read this before touching `mobile/`. It is the native analog of the web app's
 conventions: same design language, same tokens, same component names — expressed in
@@ -6,7 +6,7 @@ React Native / Expo idioms. When in doubt, open `web/src/components/ui/` and mir
 
 ## 1. Reuse boundary — logic is shared, UI is per-platform
 
-- **Logic lives in `@lyftr/shared`** and is *imported, never duplicated*: types, the
+- **Logic lives in `@sebu/shared`** and is *imported, never duplicated*: types, the
   API client, Zustand stores, and pure utils (`displayWeight`, `normalizeServerUrl`,
   `testServerConnection`, ...). If you're about to write a type, a fetch, or a
   unit-conversion in `mobile/`, stop — it belongs in `packages/shared`.

@@ -29,7 +29,7 @@ await page.keyboard.type('I built a self-hosted alternative to Hevy and Strong',
 await page.click('.CodeMirror, .cm-content, [data-testid="article-form__body"]', { timeout: 5000 }).catch(() => {})
 await page.waitForTimeout(300)
 
-const devBody = `I got tired of paying for fitness tracking apps and not owning my data, so I built Lyftr — a self-hosted workout tracker you can run on your own server or VPS with one Docker command.
+const devBody = `I got tired of paying for fitness tracking apps and not owning my data, so I built Sebu — a self-hosted workout tracker you can run on your own server or VPS with one Docker command.
 
 ## What it does
 
@@ -46,8 +46,8 @@ Go + Gin backend, React + TypeScript + Tailwind frontend, SQLite, Docker + nginx
 ## Getting started
 
 \`\`\`bash
-git clone https://github.com/Cawlumm/lyftr.git
-cd lyftr
+git clone https://github.com/Cawlumm/sebu.git
+cd sebu
 cp .env.example .env
 docker compose up -d
 \`\`\`
@@ -58,7 +58,7 @@ Open http://localhost. That's it.
 
 Your workout history is valuable data. I didn't want it locked in a SaaS that could raise prices, change APIs, or shut down. SQLite means one file to back up.
 
-Still early beta — actively building. Source: https://github.com/Cawlumm/lyftr
+Still early beta — actively building. Source: https://github.com/Cawlumm/sebu
 
 Feedback welcome.`
 
@@ -83,7 +83,7 @@ await pause('Indie Hackers post page is open. Manually paste the post (copied fr
 console.log('\n[3/3] Twitter/X')
 await page.goto('https://x.com/compose/post')
 await page.waitForTimeout(2000)
-const tweet = `Built Lyftr — a self-hosted, open source workout tracker.
+const tweet = `Built Sebu — a self-hosted, open source workout tracker.
 
 Your data. Your server. One Docker command.
 
@@ -94,7 +94,7 @@ Your data. Your server. One Docker command.
 
 Still early beta but it's usable daily.
 
-github.com/Cawlumm/lyftr
+github.com/Cawlumm/sebu
 
 #buildinpublic #selfhosted #opensource #fitness`
 

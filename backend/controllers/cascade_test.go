@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Cawlumm/lyftr-backend/db"
+	"github.com/Cawlumm/sebu-backend/db"
 )
 
 // TestDeleteAccountCascadesChildren guards that DeleteAccount relies on ON DELETE

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Cawlumm/lyftr-backend/db"
+	"github.com/Cawlumm/sebu-backend/db"
 )
 
 func insertWeightLog(t *testing.T, uid int64, weight float64, loggedAt time.Time) int64 {

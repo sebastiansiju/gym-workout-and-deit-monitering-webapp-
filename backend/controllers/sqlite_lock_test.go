@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Cawlumm/lyftr-backend/db"
-	"github.com/Cawlumm/lyftr-backend/stores"
-	"github.com/Cawlumm/lyftr-backend/utils"
+	"github.com/Cawlumm/sebu-backend/db"
+	"github.com/Cawlumm/sebu-backend/stores"
+	"github.com/Cawlumm/sebu-backend/utils"
 	_ "modernc.org/sqlite"
 )
 

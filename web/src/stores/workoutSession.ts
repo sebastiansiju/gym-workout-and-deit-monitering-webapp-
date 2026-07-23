@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import * as types from '../types'
 
-const SESSION_KEY = 'lyftr_active_session'
-const GYM_UI_KEY = 'lyftr_gym_ui'
+const SESSION_KEY = 'sebu_active_session'
+const GYM_UI_KEY = 'sebu_gym_ui'
 
 function saveLocal(session: types.ActiveSession | null) {
   if (session) {

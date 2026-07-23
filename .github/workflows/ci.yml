@@ -117,10 +117,10 @@ jobs:
       - name: Build images with layer cache
         run: |
           docker buildx bake \
-            --set "backend.cache-from=type=gha,scope=lyftr-backend" \
-            --set "backend.cache-to=type=gha,scope=lyftr-backend,mode=max" \
-            --set "frontend.cache-from=type=gha,scope=lyftr-frontend" \
-            --set "frontend.cache-to=type=gha,scope=lyftr-frontend,mode=max" \
+            --set "backend.cache-from=type=gha,scope=sebu-backend" \
+            --set "backend.cache-to=type=gha,scope=sebu-backend,mode=max" \
+            --set "frontend.cache-from=type=gha,scope=sebu-frontend" \
+            --set "frontend.cache-to=type=gha,scope=sebu-frontend,mode=max" \
             --load
 
       - name: Start stack
@@ -152,7 +152,7 @@ jobs:
         run: |
           timeout 90 bash -c 'until curl -sf -X POST http://localhost/api/v1/auth/login \
             -H "Content-Type: application/json" \
-            -d "{\"email\":\"demo@lyftr.local\",\"password\":\"password123\"}" \
+            -d "{\"email\":\"demo@sebu.local\",\"password\":\"password123\"}" \
             | grep -q "token"; do sleep 3; done'
 
       - name: Run E2E tests
@@ -176,11 +176,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build backend image with a known version
-        run: docker build --build-arg VERSION=smoke-9.9.9 -t lyftr-backend:smoke ./backend
+        run: docker build --build-arg VERSION=smoke-9.9.9 -t sebu-backend:smoke ./backend
       - name: Assert the binary reports the injected version
         run: |
           set -euo pipefail
-          out=$(docker run --rm lyftr-backend:smoke --version)
+          out=$(docker run --rm sebu-backend:smoke --version)
           echo "version output: $out"
           echo "$out" | grep -q 'smoke-9.9.9'
 
@@ -208,7 +208,7 @@ jobs:
       - uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/lyftr-backend
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/sebu-backend
           tags: |
             type=ref,event=tag
             type=raw,value=latest,enable={{is_default_branch}}
@@ -220,8 +220,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
             VERSION=${{ steps.ver.outputs.version }}
-          cache-from: type=gha,scope=lyftr-backend
-          cache-to: type=gha,scope=lyftr-backend,mode=max
+          cache-from: type=gha,scope=sebu-backend
+          cache-to: type=gha,scope=sebu-backend,mode=max
 
   build-frontend:
     name: Build & push frontend image
@@ -240,7 +240,7 @@ jobs:
       - uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/lyftr-frontend
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/sebu-frontend
           tags: |
             type=ref,event=tag
             type=raw,value=latest,enable={{is_default_branch}}
@@ -250,8 +250,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/') }}
           tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha,scope=lyftr-frontend
-          cache-to: type=gha,scope=lyftr-frontend,mode=max
+          cache-from: type=gha,scope=sebu-frontend
+          cache-to: type=gha,scope=sebu-frontend,mode=max
 
   deploy-demo:
     name: Deploy to Fly.io

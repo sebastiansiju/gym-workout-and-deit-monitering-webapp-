@@ -1,5 +1,5 @@
 // Metro config for a monorepo: watch the workspace root so Metro transpiles the
-// @lyftr/shared TypeScript source, and resolve modules from both the app's and the
+// @sebu/shared TypeScript source, and resolve modules from both the app's and the
 // root's node_modules. Wrapped with NativeWind's metro transform.
 const { getDefaultConfig } = require('expo/metro-config')
 const { withNativeWind } = require('nativewind/metro')

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Cawlumm/lyftr-backend/db"
+	"github.com/Cawlumm/sebu-backend/db"
 )
 
 func TestListWorkouts_empty(t *testing.T) {

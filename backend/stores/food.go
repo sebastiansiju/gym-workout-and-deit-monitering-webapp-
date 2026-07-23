@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/Cawlumm/lyftr-backend/models"
+	"github.com/Cawlumm/sebu-backend/models"
 )
 
 // FoodStore owns all SQL for food_logs and saved_foods.

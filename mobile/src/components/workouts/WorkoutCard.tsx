@@ -3,10 +3,10 @@ import { Pressable, View } from 'react-native'
 import { router } from 'expo-router'
 import { format } from 'date-fns'
 import { ChevronRight, Clock, Dumbbell, MoreVertical, TrendingUp } from 'lucide-react-native'
-import { displayVolume, type Workout } from '@lyftr/shared'
+import { displayVolume, type Workout } from '@sebu/shared'
 import { ActionSheet, AppText, Card, ConfirmSheet, IconButton, deleteAction, deleteConfirmProps, editAction } from '../ui'
 import { useTheme } from '../../theme/useTheme'
-import { client } from '../../lib/lyftr'
+import { client } from '../../lib/sebu'
 import { ExerciseImage } from './ExerciseImage'
 
 interface Props {

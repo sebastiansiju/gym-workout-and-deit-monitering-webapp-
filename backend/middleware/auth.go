@@ -3,7 +3,7 @@ package middleware
 import (
 	"strings"
 
-	"github.com/Cawlumm/lyftr-backend/utils"
+	"github.com/Cawlumm/sebu-backend/utils"
 	"github.com/gin-gonic/gin"
 )
 

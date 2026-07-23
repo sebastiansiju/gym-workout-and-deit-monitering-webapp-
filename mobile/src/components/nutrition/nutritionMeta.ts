@@ -1,5 +1,5 @@
 import { Coffee, Cookie, Moon, Sun, type LucideIcon } from 'lucide-react-native'
-import type { FoodLog } from '@lyftr/shared'
+import type { FoodLog } from '@sebu/shared'
 
 // Meal + macro presentation constants, ported 1:1 from web (Food.tsx / LogFood.tsx +
 // utils/macroColors.ts). Web expressed colors as Tailwind text-* classes; on native

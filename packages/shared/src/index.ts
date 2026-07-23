@@ -1,4 +1,4 @@
-// @lyftr/shared — platform-agnostic core shared by the web and mobile apps.
+// @sebu/shared — platform-agnostic core shared by the web and mobile apps.
 // Contains: domain types, the storage-injected API client, Zustand store factories,
 // and pure utilities. NO UI and NO platform APIs (storage is injected).
 

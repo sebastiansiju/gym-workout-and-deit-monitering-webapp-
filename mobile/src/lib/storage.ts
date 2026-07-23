@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { StorageAdapter, STORAGE_KEYS } from '@lyftr/shared'
+import { StorageAdapter, STORAGE_KEYS } from '@sebu/shared'
 
 // The mobile StorageAdapter: on native, secrets (tokens + cached user) live in the
 // Keychain via SecureStore, non-secret prefs in AsyncStorage. On the web target

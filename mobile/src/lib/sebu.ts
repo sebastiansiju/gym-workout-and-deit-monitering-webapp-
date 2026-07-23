@@ -8,7 +8,7 @@ import {
   createSettingsStore,
   createThemeStore,
   createWorkoutSession,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import { storage } from './storage'
 
 export const client = createClient(storage, {

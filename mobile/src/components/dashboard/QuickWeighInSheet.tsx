@@ -5,12 +5,12 @@ import { AlertCircle, Scale, X } from 'lucide-react-native'
 import {
   apiErrorMessage, dayToIsoNoon, displayToLbs, isoToDayInput, maxWeight, todayStr,
   weightError, weightShort, type WeightLog,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import {
   AppText, Button, DateInput, Field, NumberField, NumericKeyboardAccessory, NUMERIC_ACCESSORY_ID,
   Sheet, StepperTile,
 } from '../ui'
-import { client, useSettingsStore } from '../../lib/lyftr'
+import { client, useSettingsStore } from '../../lib/sebu'
 import { clampStep } from '../../utils/number'
 import { useTheme } from '../../theme/useTheme'
 

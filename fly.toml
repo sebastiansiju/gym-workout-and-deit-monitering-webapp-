@@ -1,9 +1,9 @@
-# fly.toml — Lyftr demo instance
+# fly.toml — Sebu demo instance
 # Set app name below, then: fly secrets set JWT_SECRET=<random-32-chars>
 # First deploy: fly deploy
 # See fly/SETUP.md for full instructions.
 
-app = "lyftr-demo"
+app = "sebu-demo"
 primary_region = "fra"
 
 [build]
@@ -12,8 +12,8 @@ primary_region = "fra"
 [env]
   ENV        = "production"
   PORT       = "3000"
-  DB_PATH    = "/app/data/lyftr.db"
-  CORS_ORIGIN = "https://lyftr-demo.fly.dev"
+  DB_PATH    = "/app/data/sebu.db"
+  CORS_ORIGIN = "https://sebu-demo.fly.dev"
 
 # JWT_SECRET must be set as a secret:
 #   fly secrets set JWT_SECRET=$(openssl rand -hex 32)
@@ -31,7 +31,7 @@ primary_region = "fra"
     soft_limit = 80
 
 [[mounts]]
-  source      = "lyftr_data"
+  source      = "sebu_data"
   destination = "/app/data"
 
 [[vm]]

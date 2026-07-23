@@ -7,12 +7,12 @@ import { AlertCircle, ArrowLeft, Edit2, Scale, Trash2 } from 'lucide-react-nativ
 import {
   apiErrorMessage, dayToIsoNoon, displayWeight, isoToDayInput, maxWeight, resolveWeightLbs,
   weightError, weightShort, type WeightLog,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import {
   AppText, Button, Card, ConfirmSheet, DateInput, Field, Label, Loading, NumberField,
   NumericKeyboardAccessory, NUMERIC_ACCESSORY_ID, Screen, StepperTile, deleteConfirmProps,
 } from '../../../src/components/ui'
-import { client, useSettingsStore } from '../../../src/lib/lyftr'
+import { client, useSettingsStore } from '../../../src/lib/sebu'
 import { clampStep } from '../../../src/utils/number'
 import { useTheme } from '../../../src/theme/useTheme'
 

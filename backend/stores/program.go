@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"strings"
 
-	"github.com/Cawlumm/lyftr-backend/models"
+	"github.com/Cawlumm/sebu-backend/models"
 )
 
 // ProgramStore owns all SQL for programs, program_exercises and program_sets.

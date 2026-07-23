@@ -2,10 +2,10 @@ import { create } from 'zustand'
 import * as types from '../types'
 import { StorageAdapter } from '../storage'
 
-// Same keys as the web app's localStorage — a future web migration to @lyftr/shared
+// Same keys as the web app's localStorage — a future web migration to @sebu/shared
 // is a drop-in. Exported so tests (and hydration seeding) can reference them.
-export const WORKOUT_SESSION_KEY = 'lyftr_active_session'
-export const GYM_UI_KEY = 'lyftr_gym_ui'
+export const WORKOUT_SESSION_KEY = 'sebu_active_session'
+export const GYM_UI_KEY = 'sebu_gym_ui'
 
 export type GymPhase = 'overview' | 'exercise-info' | 'exercise'
 

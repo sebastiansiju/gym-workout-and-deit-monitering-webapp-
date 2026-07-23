@@ -1,4 +1,4 @@
-# Terraform for the Cloudflare infra (the Pages project; later: lyftr.dev domain + DNS).
+# Terraform for the Cloudflare infra (the Pages project; later: sebu.dev domain + DNS).
 # State lives in Cloudflare R2 (free tier). `plan` on PRs, `apply` on main / on-demand.
 #
 # SECURITY (public repo + cloud creds):

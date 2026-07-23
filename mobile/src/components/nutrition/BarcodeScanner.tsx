@@ -58,7 +58,7 @@ export function BarcodeScanner({ onResult, onClose }: Props) {
               </AppText>
               <AppText variant="body" color="muted" className="mt-2 text-center">
                 {denied
-                  ? 'Enable camera access for Lyftr in your device settings to scan barcodes.'
+                  ? 'Enable camera access for Sebu in your device settings to scan barcodes.'
                   : 'Allow camera access to scan a food barcode.'}
               </AppText>
               {!denied ? (

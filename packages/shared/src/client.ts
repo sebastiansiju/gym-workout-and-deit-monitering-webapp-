@@ -39,7 +39,7 @@ export const apiErrorMessage = (err: any, fallback: string): string => {
   return "Can't reach the server. Check the URL, that the backend is running, and that it allows this app's origin (CORS)."
 }
 
-// Probe a server's public /info endpoint to confirm it's reachable and is a Lyftr
+// Probe a server's public /info endpoint to confirm it's reachable and is a Sebu
 // backend. Pass '' for the default/reverse-proxy origin.
 export const testServerConnection = async (
   base: string,
@@ -48,7 +48,7 @@ export const testServerConnection = async (
     const res = await axios.get<{ data: ServerInfo }>(`${apiUrl(base)}/info`, { timeout: 8000 })
     const info = res.data?.data
     if (!info?.name) {
-      return { ok: false, message: "That responded, but it doesn't look like a Lyftr server." }
+      return { ok: false, message: "That responded, but it doesn't look like a Sebu server." }
     }
     return { ok: true, info }
   } catch (err) {
@@ -210,4 +210,4 @@ export function createClient(storage: StorageAdapter, opts: ClientOptions = {}) 
   }
 }
 
-export type LyftrClient = ReturnType<typeof createClient>
+export type SebuClient = ReturnType<typeof createClient>

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Cawlumm/lyftr-backend/db"
+	"github.com/Cawlumm/sebu-backend/db"
 )
 
 // ─── helpers ──────────────────────────────────────────────────────────────────

@@ -4,9 +4,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/Cawlumm/lyftr-backend/config"
-	"github.com/Cawlumm/lyftr-backend/controllers"
-	"github.com/Cawlumm/lyftr-backend/middleware"
+	"github.com/Cawlumm/sebu-backend/config"
+	"github.com/Cawlumm/sebu-backend/controllers"
+	"github.com/Cawlumm/sebu-backend/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

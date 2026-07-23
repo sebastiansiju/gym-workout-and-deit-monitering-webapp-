@@ -15,7 +15,7 @@ terraform {
   # stays out of source. R2 credentials come from AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY (GitHub
   # secrets). `use_lockfile` is native S3 locking (Terraform >= 1.10) — no DynamoDB needed.
   backend "s3" {
-    bucket = "lyftr-tfstate"
+    bucket = "sebu-tfstate"
     key    = "cloudflare/pages.tfstate"
     region = "auto"
 

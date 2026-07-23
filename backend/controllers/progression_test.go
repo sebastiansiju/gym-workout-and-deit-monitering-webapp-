@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Cawlumm/lyftr-backend/db"
-	"github.com/Cawlumm/lyftr-backend/stores"
+	"github.com/Cawlumm/sebu-backend/db"
+	"github.com/Cawlumm/sebu-backend/stores"
 )
 
 // ptTarget is a seeded routine set target (issue #40 auto-progression tests).

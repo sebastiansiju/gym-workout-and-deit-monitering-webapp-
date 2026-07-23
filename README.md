@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.png" alt="Lyftr — self-hosted workout tracking" width="100%" />
+  <img src="docs/banner.png" alt="Sebu — self-hosted workout tracking" width="100%" />
 </p>
 
 <p align="center">
@@ -8,9 +8,9 @@
 </p>
 
 <p align="center">
-  <a href="https://lyftr-demo.fly.dev">Live demo</a> ·
-  <a href="https://lyftr-app.pages.dev">Docs</a> ·
-  <a href="https://github.com/Cawlumm/lyftr/releases?q=mobile-v">Download APK</a> ·
+  <a href="https://sebu-demo.fly.dev">Live demo</a> ·
+  <a href="https://sebu-app.pages.dev">Docs</a> ·
+  <a href="https://github.com/Cawlumm/sebu/releases?q=mobile-v">Download APK</a> ·
   <a href="https://discord.gg/hfFWsrebQA">Discord</a>
 </p>
 
@@ -18,13 +18,13 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
   <img src="https://img.shields.io/badge/status-beta-orange" alt="Beta" />
   <a href="https://selfh.st/weekly/2026-04-24/"><img src="https://img.shields.io/badge/Featured%20in-selfh.st-6366f1" alt="Featured in selfh.st" /></a>
-  <a href="https://github.com/Cawlumm/lyftr/releases?q=mobile-v"><img src="https://img.shields.io/github/v/release/Cawlumm/lyftr?filter=mobile-v*&label=Android&logo=android&logoColor=white&color=3ddc84" alt="Android APK" /></a>
+  <a href="https://github.com/Cawlumm/sebu/releases?q=mobile-v"><img src="https://img.shields.io/github/v/release/Cawlumm/sebu?filter=mobile-v*&label=Android&logo=android&logoColor=white&color=3ddc84" alt="Android APK" /></a>
   <img src="https://img.shields.io/badge/iOS-planned-black?logo=apple&logoColor=white" alt="iOS planned" />
 </p>
 
 ---
 
-## What is Lyftr?
+## What is Sebu?
 
 A workout tracker you fully own. Log workouts, build reusable programs, run a guided gym session with
 a rest timer, and track nutrition and bodyweight — all self-hosted and lightweight, with your data in
@@ -58,8 +58,8 @@ _Planned: PWA · Strong/Hevy CSV import · iOS app._
 No clone, no build — just Docker:
 
 ```bash
-curl -o docker-compose.yml https://raw.githubusercontent.com/Cawlumm/lyftr/main/docker-compose.yml
-curl -o .env https://raw.githubusercontent.com/Cawlumm/lyftr/main/.env.example
+curl -o docker-compose.yml https://raw.githubusercontent.com/Cawlumm/sebu/main/docker-compose.yml
+curl -o .env https://raw.githubusercontent.com/Cawlumm/sebu/main/.env.example
 # set a strong JWT_SECRET in .env, then pull the prebuilt images and start:
 docker compose pull && docker compose up -d
 ```
@@ -67,12 +67,12 @@ docker compose pull && docker compose up -d
 Open `http://localhost` and create your account.
 
 📖 **Full guide** — configuration, HTTPS, backups, the mobile app, and troubleshooting live in the
-**[docs → lyftr-app.pages.dev](https://lyftr-app.pages.dev)**.
+**[docs → sebu-app.pages.dev](https://sebu-app.pages.dev)**.
 
 ## Try it
 
-- **Live demo** — [lyftr-demo.fly.dev](https://lyftr-demo.fly.dev) · `demo@lyftr.local` / `password123` (resets hourly)
-- **Android** — [download the APK](https://github.com/Cawlumm/lyftr/releases?q=mobile-v), then point it at your server ([mobile docs](https://lyftr-app.pages.dev/mobile/)). iOS is planned.
+- **Live demo** — [sebu-demo.fly.dev](https://sebu-demo.fly.dev) · `demo@sebu.local` / `password123` (resets hourly)
+- **Android** — [download the APK](https://github.com/Cawlumm/sebu/releases?q=mobile-v), then point it at your server ([mobile docs](https://sebu-app.pages.dev/mobile/)). iOS is planned.
 
 ## Roadmap
 

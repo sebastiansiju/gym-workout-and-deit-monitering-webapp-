@@ -3,14 +3,14 @@ import { Image, Pressable, ScrollView, Text, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { format, parseISO } from 'date-fns'
 import { AlertCircle, ArrowLeft, Edit2, Flame, Trash2 } from 'lucide-react-native'
-import type { FoodLog } from '@lyftr/shared'
+import type { FoodLog } from '@sebu/shared'
 import {
   AppText, Card, ConfirmSheet, Loading, Screen, deleteConfirmProps,
 } from '../../../src/components/ui'
 import {
   MACRO_COLORS, MACRO_TEXT, MEAL_COLORS, MEAL_ICONS, MEAL_LABELS, type Meal,
 } from '../../../src/components/nutrition/nutritionMeta'
-import { client } from '../../../src/lib/lyftr'
+import { client } from '../../../src/lib/sebu'
 import { useTheme } from '../../../src/theme/useTheme'
 
 // Read-only view of a logged food entry, matching the weight/[id] · workouts/[id] idiom:

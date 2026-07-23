@@ -1,5 +1,5 @@
 #!/bin/sh
-# entrypoint.sh — container init for the Lyftr demo on Fly.io
+# entrypoint.sh — container init for the Sebu demo on Fly.io
 #
 # Responsibilities:
 #   1. Register hourly cron job to reset the demo DB (reset.sh)
@@ -13,12 +13,12 @@ mkdir -p /var/spool/cron/crontabs
 echo "0 * * * * /app/reset.sh >> /var/log/reset.log 2>&1" > /var/spool/cron/crontabs/root
 crond
 
-# Restart loop: reset.sh uses pkill to stop lyftr-api; this loop restarts it.
+# Restart loop: reset.sh uses pkill to stop sebu-api; this loop restarts it.
 # Running in background (&) so nginx can start as foreground PID 1.
 while true; do
-    echo "[lyftr] starting backend..."
-    /app/lyftr-api || true
-    echo "[lyftr] backend exited, restarting in 3s..."
+    echo "[sebu] starting backend..."
+    /app/sebu-api || true
+    echo "[sebu] backend exited, restarting in 3s..."
     sleep 3
 done &
 

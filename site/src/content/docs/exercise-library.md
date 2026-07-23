@@ -1,14 +1,14 @@
 ---
 title: Exercise Library
-description: Lyftr auto-seeds 800+ exercises on first startup from free-exercise-db — no API key, no setup.
+description: Sebu auto-seeds 800+ exercises on first startup from free-exercise-db — no API key, no setup.
 ---
 
-Lyftr ships with an **800+ exercise library** that seeds itself automatically. No API key, no manual
+Sebu ships with an **800+ exercise library** that seeds itself automatically. No API key, no manual
 import, no setup.
 
 ## Automatic seeding
 
-On first startup, Lyftr fetches the catalog from
+On first startup, Sebu fetches the catalog from
 [free-exercise-db](https://github.com/yuhonas/free-exercise-db) in the background:
 
 ```

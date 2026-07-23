@@ -18,7 +18,7 @@ import { AppText } from './Typography'
 
 // The web app's full-screen loader (web/src/components/Loading.tsx), ported 1:1: a
 // barbell that dips and flexes under load like a rep, five rep-dots blinking in a
-// chase, and the lyftr / LOADING wordmark. Geometry is in explicit px (the web uses
+// chase, and the sebu / LOADING wordmark. Geometry is in explicit px (the web uses
 // absolute Tailwind offsets, several non-standard) so the rig reads identically on
 // RN. Motion is on the UI thread via Reanimated (CSS @keyframes have no RN analog).
 
@@ -141,7 +141,7 @@ export function Loading({ sublabel = 'Loading' }: { sublabel?: string }) {
 
       {/* Wordmark */}
       <View className="items-center">
-        <AppText variant="heading" className="tracking-tight">lyftr</AppText>
+        <AppText variant="heading" className="tracking-tight">sebu</AppText>
         <AppText variant="label" color="muted" className="mt-2 uppercase" style={{ letterSpacing: 3 }}>
           {sublabel}
         </AppText>

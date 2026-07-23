@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: Fixes for the most common Lyftr self-hosting issues — 502 errors, login, ports, and exercise seeding.
+description: Fixes for the most common Sebu self-hosting issues — 502 errors, login, ports, and exercise seeding.
 ---
 
 The common issues, and how to fix them.
@@ -31,7 +31,7 @@ Changing `JWT_SECRET` invalidates existing sessions — log in again.
 
 ## Port already in use
 
-If host port 80 is taken (another web server, or a reverse proxy), move Lyftr to a free port with
+If host port 80 is taken (another web server, or a reverse proxy), move Sebu to a free port with
 `PORT=8080` in `.env`, then restart. If you're running a reverse proxy, see
 [HTTPS & Reverse Proxy](../https/).
 
@@ -54,5 +54,5 @@ docker compose logs backend | grep -i seed
 
 ## Still stuck?
 
-Open an issue on [GitHub](https://github.com/Cawlumm/lyftr/issues) or ask in the
+Open an issue on [GitHub](https://github.com/Cawlumm/sebu/issues) or ask in the
 [Discord](https://discord.gg/hfFWsrebQA) — include your `docker compose logs` output.

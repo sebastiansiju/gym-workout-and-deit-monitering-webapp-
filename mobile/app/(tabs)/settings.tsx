@@ -16,7 +16,7 @@ import {
   Timer,
   Trash2,
 } from 'lucide-react-native'
-import { normalizeServerUrl, testServerConnection } from '@lyftr/shared'
+import { normalizeServerUrl, testServerConnection } from '@sebu/shared'
 import {
   AppText,
   Button,
@@ -35,7 +35,7 @@ import {
   Toggle,
   type ToastVariant,
 } from '../../src/components/ui'
-import { client, useAuthStore, useServerStore, useSettingsStore } from '../../src/lib/lyftr'
+import { client, useAuthStore, useServerStore, useSettingsStore } from '../../src/lib/sebu'
 import { useTheme } from '../../src/theme/useTheme'
 
 const MONTHS = [

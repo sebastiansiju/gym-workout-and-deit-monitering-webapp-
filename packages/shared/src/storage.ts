@@ -9,7 +9,7 @@ export interface StorageAdapter {
 }
 
 // Canonical storage keys — kept identical to the web app's localStorage keys so a
-// future web migration to @lyftr/shared is a drop-in.
+// future web migration to @sebu/shared is a drop-in.
 export const STORAGE_KEYS = {
   access: 'access_token',
   refresh: 'refresh_token',

@@ -10,13 +10,13 @@ import {
 } from 'lucide-react-native'
 import {
   displayToLbs, displayWeight, weightShort, type Exercise,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import { AppText, ConfirmSheet, NumberField, NumericKeyboardAccessory, NUMERIC_ACCESSORY_ID, StepperTile } from '../ui'
 import { RestPicker } from './RestPicker'
 import { ExercisePicker } from './ExercisePicker'
 import { MuscleDiagram } from './MuscleDiagram'
 import { RestTimerBanner } from './RestTimerBanner'
-import { client, useSettingsStore, useWorkoutSession } from '../../lib/lyftr'
+import { client, useSettingsStore, useWorkoutSession } from '../../lib/sebu'
 import { useWorkoutOutcome } from '../../lib/workoutOutcome'
 import { useTheme } from '../../theme/useTheme'
 import { clampStep, clampValue } from '../../utils/number'

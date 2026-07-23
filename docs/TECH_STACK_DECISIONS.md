@@ -1,4 +1,4 @@
-# Lyfter Tech Stack Decisions
+# Sebu Tech Stack Decisions
 
 ## Summary
 - **Mobile**: React Native (Expo) or Flutter

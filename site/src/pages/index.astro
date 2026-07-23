@@ -11,16 +11,16 @@ import shotSettings from '../assets/settings-mobile.png';
 import shotGymDesktop from '../assets/gym-mode-overview-desktop.png';
 
 // Normalize to always end in '/', so `${base}getting-started/` joins correctly. Astro's
-// BASE_URL can come back without a trailing slash (e.g. '/lyftr'), which would mangle links.
+// BASE_URL can come back without a trailing slash (e.g. '/sebu'), which would mangle links.
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const DEMO = 'https://lyftr-demo.fly.dev';
-const REPO = 'https://github.com/Cawlumm/lyftr';
+const DEMO = 'https://sebu-demo.fly.dev';
+const REPO = 'https://github.com/Cawlumm/sebu';
 const DISCORD = 'https://discord.gg/hfFWsrebQA';
-const APK = 'https://github.com/Cawlumm/lyftr/releases?q=mobile-v';
+const APK = 'https://github.com/Cawlumm/sebu/releases?q=mobile-v';
 
-const title = 'Lyftr — Self-Hosted Workout Tracker & Hevy / Strong Alternative (Open Source)';
+const title = 'Sebu — Self-Hosted Workout Tracker & Hevy / Strong Alternative (Open Source)';
 const description =
-  'Lyftr is a free, self-hosted, open-source workout & nutrition tracker — a no-subscription alternative to Hevy and Strong. Own your data. Deploy in one Docker command on a Raspberry Pi, NAS, or VPS.';
+  'Sebu is a free, self-hosted, open-source workout & nutrition tracker — a no-subscription alternative to Hevy and Strong. Own your data. Deploy in one Docker command on a Raspberry Pi, NAS, or VPS.';
 
 const canonical = new URL(base, Astro.site).href;
 const ogImage = new URL(banner.src, Astro.site).href;
@@ -63,7 +63,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': canonical + '#website',
       url: canonical,
-      name: 'Lyftr',
+      name: 'Sebu',
       description,
       inLanguage: 'en',
       publisher: { '@id': canonical + '#org' },
@@ -71,14 +71,14 @@ const jsonLd = {
     {
       '@type': 'Organization',
       '@id': canonical + '#org',
-      name: 'Lyftr',
+      name: 'Sebu',
       url: canonical,
       logo: logoUrl,
       sameAs: [REPO, DISCORD],
     },
     {
       '@type': 'SoftwareApplication',
-      name: 'Lyftr',
+      name: 'Sebu',
       applicationCategory: 'HealthApplication',
       operatingSystem: 'Android, Web, Docker',
       description,
@@ -113,8 +113,8 @@ const jsonLd = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content={banner.width.toString()} />
     <meta property="og:image:height" content={banner.height.toString()} />
-    <meta property="og:image:alt" content="Lyftr — self-hosted workout tracker on phone and desktop" />
-    <meta property="og:site_name" content="Lyftr" />
+    <meta property="og:image:alt" content="Sebu — self-hosted workout tracker on phone and desktop" />
+    <meta property="og:site_name" content="Sebu" />
     <meta property="og:locale" content="en_US" />
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -138,7 +138,7 @@ const jsonLd = {
       <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
         <a href={base} class="flex items-center gap-2 font-display text-lg font-extrabold tracking-tight">
           <span class="inline-block h-5 w-5 rounded bg-gradient-brand shadow-glow-sm"></span>
-          Lyftr
+          Sebu
         </a>
         <div class="flex items-center gap-2 text-sm">
           <a href={`${base}getting-started/`} class="hidden rounded-lg px-3 py-2 text-tx-secondary hover:text-tx-primary sm:inline-block">Docs</a>
@@ -173,7 +173,7 @@ const jsonLd = {
               </a>
             </div>
             <p class="mt-4 text-sm text-tx-muted">
-              Demo login <code class="font-mono text-tx-secondary">demo@lyftr.local</code> /
+              Demo login <code class="font-mono text-tx-secondary">demo@sebu.local</code> /
               <code class="font-mono text-tx-secondary">password123</code> · resets hourly
             </p>
           </div>
@@ -182,7 +182,7 @@ const jsonLd = {
             <div class="absolute inset-0 -z-10 rounded-3xl bg-gradient-brand opacity-20 blur-2xl"></div>
             <Image
               src={banner}
-              alt="Lyftr running on phone and desktop — dashboard, gym mode, and workout logging"
+              alt="Sebu running on phone and desktop — dashboard, gym mode, and workout logging"
               class="w-full rounded-2xl border border-surface-border shadow-glow"
               widths={[480, 800, 1200]}
               sizes="(max-width: 1024px) 100vw, 560px"
@@ -206,7 +206,7 @@ const jsonLd = {
 
       <!-- Why self-host -->
       <section class="mx-auto max-w-6xl px-5 py-20">
-        <h2 class="text-center font-display text-3xl font-bold tracking-tight sm:text-4xl">Why self-host Lyftr?</h2>
+        <h2 class="text-center font-display text-3xl font-bold tracking-tight sm:text-4xl">Why self-host Sebu?</h2>
         <p class="mx-auto mt-3 max-w-2xl text-center text-tx-secondary">A modern workout tracker that's yours — open, free, and running on your own server.</p>
         <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {values.map((v) => (
@@ -254,8 +254,8 @@ const jsonLd = {
             <span class="h-3 w-3 rounded-full bg-success-500/70"></span>
             <span class="ml-2 font-mono text-xs text-tx-muted">bash</span>
           </div>
-          <pre class="overflow-x-auto p-5 font-mono text-sm leading-relaxed text-tx-secondary"><code>curl -o docker-compose.yml https://raw.githubusercontent.com/Cawlumm/lyftr/main/docker-compose.yml
-curl -o .env https://raw.githubusercontent.com/Cawlumm/lyftr/main/.env.example
+          <pre class="overflow-x-auto p-5 font-mono text-sm leading-relaxed text-tx-secondary"><code>curl -o docker-compose.yml https://raw.githubusercontent.com/Cawlumm/sebu/main/docker-compose.yml
+curl -o .env https://raw.githubusercontent.com/Cawlumm/sebu/main/.env.example
 
 <span class="text-tx-muted"># set a strong JWT_SECRET (32+ chars) in .env, then:</span>
 docker compose up -d</code></pre>
@@ -278,7 +278,7 @@ docker compose up -d</code></pre>
           <p class="mt-6 text-center text-sm text-tx-muted">Single SQLite file · minimal RAM · no external services.</p>
 
           <div class="mt-10 flex flex-col items-center gap-4">
-            <Image src={shotGymDesktop} alt="Lyftr Gym Mode on desktop" class="w-full max-w-3xl rounded-2xl border border-surface-border shadow-glow-sm" widths={[700, 1200]} sizes="(max-width: 768px) 100vw, 768px" loading="lazy" />
+            <Image src={shotGymDesktop} alt="Sebu Gym Mode on desktop" class="w-full max-w-3xl rounded-2xl border border-surface-border shadow-glow-sm" widths={[700, 1200]} sizes="(max-width: 768px) 100vw, 768px" loading="lazy" />
           </div>
         </div>
       </section>
@@ -296,7 +296,7 @@ docker compose up -d</code></pre>
 
     <footer class="border-t border-surface-border">
       <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-tx-muted sm:flex-row">
-        <p>© 2026 Lyftr · MIT License</p>
+        <p>© 2026 Sebu · MIT License</p>
         <div class="flex flex-wrap items-center gap-5">
           <a href={REPO} class="hover:text-tx-primary">GitHub</a>
           <a href={DISCORD} class="hover:text-tx-primary">Discord</a>

@@ -1,4 +1,4 @@
-# Lyfter UI Wireframes & Mockups
+# Sebu UI Wireframes & Mockups
 
 ## Mobile App Screens
 
@@ -6,7 +6,7 @@
 ```
 ┌─────────────────────┐
 │                     │
-│    LYFTER LOGO      │
+│    SEBU LOGO        │
 │                     │
 ├─────────────────────┤
 │                     │
@@ -173,7 +173,7 @@
 ### Dashboard (Desktop View)
 ```
 ┌──────────────────────────────────────┐
-│ LYFTER              [Settings] [User] │
+│ SEBU                [Settings] [User] │
 ├──────────────────────────────────────┤
 │                                      │
 │ TODAY - April 18, 2026               │

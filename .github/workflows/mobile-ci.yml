@@ -55,6 +55,6 @@ jobs:
       - run: npm run shared:test
 
       # --- mobile (Expo app) ---
-      - run: npm run type-check -w @lyftr/mobile
-      - run: npm run lint -w @lyftr/mobile
-      - run: npm run test -w @lyftr/mobile -- --ci
+      - run: npm run type-check -w @sebu/mobile
+      - run: npm run lint -w @sebu/mobile
+      - run: npm run test -w @sebu/mobile -- --ci

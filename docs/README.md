@@ -1,4 +1,4 @@
-# Lyfter - Self-Hosted Workout Tracking App
+# Sebu - Self-Hosted Workout Tracking App
 
 A privacy-first, self-hosted workout tracking application similar to MacroFactor. Users can run both the UI and backend on their own servers to maintain complete control over their fitness and nutrition data.
 
@@ -67,7 +67,7 @@ A privacy-first, self-hosted workout tracking application similar to MacroFactor
 ## Project Structure
 
 ```
-lyftr/
+sebu/
 ├── backend/          # REST API service
 ├── web/              # React web app
 ├── mobile/           # React Native/Flutter app

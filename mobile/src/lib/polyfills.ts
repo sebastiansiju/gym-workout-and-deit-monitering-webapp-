@@ -1,5 +1,5 @@
 // Must be imported once, first, at app entry.
-// - URL polyfill: Hermes lacks a complete `URL`; normalizeServerUrl() in @lyftr/shared
+// - URL polyfill: Hermes lacks a complete `URL`; normalizeServerUrl() in @sebu/shared
 //   uses `new URL()`.
 // - gesture-handler: required by react-native-screens / reanimated navigation.
 import 'react-native-gesture-handler'

@@ -1,6 +1,6 @@
 # Go Backend Development Guide
 
-Quick reference for building the Lyfter backend in Go.
+Quick reference for building the Sebu backend in Go.
 
 ## Getting Started
 
@@ -15,7 +15,7 @@ go version
 mkdir backend && cd backend
 
 # Initialize Go module
-go mod init github.com/Cawlumm/lyfter-backend
+go mod init github.com/Cawlumm/sebu-backend
 ```
 
 ### Key Dependencies
@@ -138,7 +138,7 @@ package routes
 
 import (
     "github.com/gin-gonic/gin"
-    "github.com/Cawlumm/lyfter-backend/controllers"
+    "github.com/Cawlumm/sebu-backend/controllers"
 )
 
 func RegisterAuthRoutes(router *gin.Engine) {
@@ -157,7 +157,7 @@ package main
 
 import (
     "github.com/gin-gonic/gin"
-    "github.com/Cawlumm/lyfter-backend/routes"
+    "github.com/Cawlumm/sebu-backend/routes"
 )
 
 func main() {
@@ -186,7 +186,7 @@ import (
 func InitDB() (*sql.DB, error) {
     dbPath := os.Getenv("DB_PATH")
     if dbPath == "" {
-        dbPath = "./data/lyfter.db"
+        dbPath = "./data/sebu.db"
     }
     
     db, err := sql.Open("sqlite3", dbPath)
@@ -411,7 +411,7 @@ go fmt ./...
 golangci-lint run
 
 # Build binary
-go build -o lyfter-api
+go build -o sebu-api
 
 # Run directly
 go run main.go
@@ -482,13 +482,13 @@ go mod graph
 ```
 # Database
 DB_TYPE=sqlite
-DB_PATH=./data/lyfter.db
+DB_PATH=./data/sebu.db
 
 # Or for PostgreSQL:
 # DB_TYPE=postgres
 # DB_HOST=localhost
 # DB_PORT=5432
-# DB_NAME=lyfter
+# DB_NAME=sebu
 # DB_USER=postgres
 # DB_PASSWORD=password
 

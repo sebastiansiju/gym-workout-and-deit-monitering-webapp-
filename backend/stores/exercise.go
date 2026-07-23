@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"encoding/json"
 
-	"github.com/Cawlumm/lyftr-backend/models"
-	"github.com/Cawlumm/lyftr-backend/seed"
+	"github.com/Cawlumm/sebu-backend/models"
+	"github.com/Cawlumm/sebu-backend/seed"
 )
 
 // ExerciseStore owns all SQL for the (global, read-only) exercises catalog, and

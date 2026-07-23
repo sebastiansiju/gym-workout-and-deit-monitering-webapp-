@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Cawlumm/lyftr-backend/config"
+	"github.com/Cawlumm/sebu-backend/config"
 	"github.com/golang-jwt/jwt/v5"
 )
 

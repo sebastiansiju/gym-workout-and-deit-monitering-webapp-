@@ -21,7 +21,7 @@ export default function Logo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
         fontSize: `${s.fontSize}px`,
         letterSpacing: '-0.02em',
       }}>
-        lyftr
+        sebu
       </span>
     </div>
   );

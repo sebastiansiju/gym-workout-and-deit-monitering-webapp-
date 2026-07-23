@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Cawlumm/lyftr-backend/db"
+	"github.com/Cawlumm/sebu-backend/db"
 )
 
 // Regression test for #30: list handlers used to run nested queries while a

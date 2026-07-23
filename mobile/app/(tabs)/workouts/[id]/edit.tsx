@@ -7,13 +7,13 @@ import {
 import type { LucideIcon } from 'lucide-react-native'
 import {
   apiErrorMessage, displayToLbs, lbsToDisplay, weightShort, type Exercise,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import { AppText, Button, DateInput, EmptyState, Field, IconButton, Label, Loading, Screen } from '../../../../src/components/ui'
 import { ExerciseFormCard } from '../../../../src/components/workouts/ExerciseFormCard'
 import { DurationField } from '../../../../src/components/workouts/DurationField'
 import { ExercisePicker } from '../../../../src/components/workouts/ExercisePicker'
 import { KeyboardDoneBar } from '../../../../src/components/workouts/KeyboardDoneBar'
-import { client, useSettingsStore } from '../../../../src/lib/lyftr'
+import { client, useSettingsStore } from '../../../../src/lib/sebu'
 import { useTheme } from '../../../../src/theme/useTheme'
 
 // Edit-form shape. Mobile is a superset of web's edit form: it lets you correct the

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { ActiveSession, ProgressionResult } from '@lyftr/shared'
+import type { ActiveSession, ProgressionResult } from '@sebu/shared'
 
 // A one-shot signal handed from the session teardown (gym overlay / active list) to the
 // Workouts list, which shows a confirmation toast on arrival. The overlay unmounts and we

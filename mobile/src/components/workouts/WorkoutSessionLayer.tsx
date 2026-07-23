@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
 import * as Haptics from 'expo-haptics'
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake'
-import { useWorkoutSession } from '../../lib/lyftr'
+import { useWorkoutSession } from '../../lib/sebu'
 import { useRestTimer } from '../../hooks/useRestTimer'
 import { SessionPill } from './SessionPill'
 
-const KEEP_AWAKE_TAG = 'lyftr-workout-session'
+const KEEP_AWAKE_TAG = 'sebu-workout-session'
 
 // One success buzz the moment rest hits zero — you're not looking at the screen mid-
 // rest, so the haptic is the cue. ISOLATED in its own null-rendering leaf: useRestTimer

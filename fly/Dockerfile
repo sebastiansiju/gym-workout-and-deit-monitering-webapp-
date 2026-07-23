@@ -1,11 +1,11 @@
-# Lyftr demo — single-container build for Fly.io
+# Sebu demo — single-container build for Fly.io
 #
 # Architecture: nginx (port 80) serves the React SPA and proxies /api/ to
 # the Go backend running on localhost:3000 inside the same container.
 # A persistent Fly volume at /app/data holds the SQLite DB across deploys.
 #
 # Hourly demo reset: crond inside the container runs reset.sh every hour,
-# which restores lyftr.db from a seed snapshot so the demo stays fresh.
+# which restores sebu.db from a seed snapshot so the demo stays fresh.
 # The seed snapshot is created manually on first deploy (see fly/SETUP.md).
 
 # ── Stage 1: Frontend ────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ FROM nginx:alpine
 # wget: used in health checks if needed
 RUN apk add --no-cache ca-certificates wget
 
-COPY --from=backend /build/lyftr-api     /app/lyftr-api
+COPY --from=backend /build/sebu-api     /app/sebu-api
 COPY --from=frontend /app/dist           /usr/share/nginx/html
 
 # Fly-specific nginx config: proxy_pass uses localhost:3000 (not :3000 service name)

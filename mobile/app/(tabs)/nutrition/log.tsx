@@ -8,7 +8,7 @@ import {
 import {
   dayToIsoNoon, todayStr,
   type FoodLog, type FoodSearchResult, type SavedFood,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import {
   AppText, Button, Card, DateInput, IconButton, Label, NumberField,
   NumericKeyboardAccessory, NUMERIC_ACCESSORY_ID, Screen, SearchField, SegmentedControl, Toggle,
@@ -17,7 +17,7 @@ import { BarcodeScanner } from '../../../src/components/nutrition/BarcodeScanner
 import {
   MACRO_COLORS, MACRO_TEXT, MEALS, MEAL_COLORS, MEAL_ICONS, MEAL_LABELS, type Meal,
 } from '../../../src/components/nutrition/nutritionMeta'
-import { client } from '../../../src/lib/lyftr'
+import { client } from '../../../src/lib/sebu'
 import { useTheme } from '../../../src/theme/useTheme'
 
 type Phase = 'search' | 'detail' | 'scan'

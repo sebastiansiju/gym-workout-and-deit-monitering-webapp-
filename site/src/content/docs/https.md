@@ -1,14 +1,14 @@
 ---
 title: HTTPS & Reverse Proxy
-description: Put Lyftr behind Caddy or nginx with automatic HTTPS (Let's Encrypt) for a public, secure instance.
+description: Put Sebu behind Caddy or nginx with automatic HTTPS (Let's Encrypt) for a public, secure instance.
 ---
 
-Lyftr's container serves plain HTTP on a host port. To expose it publicly — and to use the **mobile
+Sebu's container serves plain HTTP on a host port. To expose it publicly — and to use the **mobile
 app**, which needs a real hostname — put it behind a reverse proxy that terminates HTTPS.
 
 :::caution[Port conflict]
-By default the compose file publishes Lyftr on host port **80** (`PORT=80`). A reverse proxy also
-wants 80/443, so first move Lyftr to a different host port — set `PORT=8080` in your `.env` — and
+By default the compose file publishes Sebu on host port **80** (`PORT=80`). A reverse proxy also
+wants 80/443, so first move Sebu to a different host port — set `PORT=8080` in your `.env` — and
 point the proxy at `localhost:8080`.
 :::
 
@@ -18,7 +18,7 @@ point the proxy at `localhost:8080`.
 `Caddyfile`:
 
 ```caddyfile
-lyftr.example.com {
+sebu.example.com {
     reverse_proxy localhost:8080
 }
 ```
@@ -29,7 +29,7 @@ Then reload Caddy. That's it — HTTPS is live and auto-renewing.
 
 ```nginx
 server {
-    server_name lyftr.example.com;
+    server_name sebu.example.com;
 
     location / {
         proxy_pass http://localhost:8080;
@@ -43,17 +43,17 @@ server {
 Then issue a certificate with [Certbot](https://certbot.eff.org):
 
 ```bash
-sudo certbot --nginx -d lyftr.example.com
+sudo certbot --nginx -d sebu.example.com
 ```
 
-## Point Lyftr at your public origin
+## Point Sebu at your public origin
 
 After the proxy is up, set `CORS_ORIGIN` to your HTTPS URL so browser and mobile clients are
 allowed, and restart:
 
 ```bash
 # in .env
-CORS_ORIGIN=https://lyftr.example.com
+CORS_ORIGIN=https://sebu.example.com
 ```
 
 ```bash

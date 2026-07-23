@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: cwlumm/lyftr-backend:latest
+    image: cwlumm/sebu-backend:latest
     build: ./backend
     restart: unless-stopped
     volumes:
@@ -13,7 +13,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost}
       - DB_TYPE=sqlite
-      - DB_PATH=/app/data/lyftr.db
+      - DB_PATH=/app/data/sebu.db
     expose:
       - "3000"
     healthcheck:
@@ -23,7 +23,7 @@ services:
       retries: 3
 
   frontend:
-    image: cwlumm/lyftr-frontend:latest
+    image: cwlumm/sebu-frontend:latest
     build: ./web
     restart: unless-stopped
     environment:

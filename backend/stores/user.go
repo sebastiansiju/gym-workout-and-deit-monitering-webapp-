@@ -3,7 +3,7 @@ package stores
 import (
 	"database/sql"
 
-	"github.com/Cawlumm/lyftr-backend/models"
+	"github.com/Cawlumm/sebu-backend/models"
 )
 
 // UserStore owns all SQL for users and user_settings.

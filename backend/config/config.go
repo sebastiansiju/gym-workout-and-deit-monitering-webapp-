@@ -27,7 +27,7 @@ var C *Config
 
 // buildVersion is set at build time via:
 //
-//	-ldflags "-X github.com/Cawlumm/lyftr-backend/config.buildVersion=$VERSION"
+//	-ldflags "-X github.com/Cawlumm/sebu-backend/config.buildVersion=$VERSION"
 //
 // where the Dockerfiles pass the git tag as the VERSION build-arg. It falls back
 // to "dev" for local/untagged builds. If you rename this var or the package, also
@@ -45,10 +45,10 @@ func Load() {
 	C = &Config{
 		Port:       getEnv("PORT", "3000"),
 		DBType:     getEnv("DB_TYPE", "sqlite"),
-		DBPath:     getEnv("DB_PATH", "./data/lyftr.db"),
+		DBPath:     getEnv("DB_PATH", "./data/sebu.db"),
 		DBHost:     getEnv("DB_HOST", "localhost"),
 		DBPort:     getEnv("DB_PORT", "5432"),
-		DBName:     getEnv("DB_NAME", "lyftr"),
+		DBName:     getEnv("DB_NAME", "sebu"),
 		DBUser:     getEnv("DB_USER", "postgres"),
 		DBPassword: getEnv("DB_PASSWORD", ""),
 		JWTSecret:  getEnv("JWT_SECRET", "change-me-in-production-min-32-chars!!"),

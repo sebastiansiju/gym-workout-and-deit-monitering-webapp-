@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Cawlumm/lyftr-backend/config"
+	"github.com/Cawlumm/sebu-backend/config"
 )
 
 func TestServerInfo(t *testing.T) {
@@ -21,8 +21,8 @@ func TestServerInfo(t *testing.T) {
 	if !ok {
 		t.Fatalf("missing data envelope: %v", body)
 	}
-	if data["name"] != "lyftr" {
-		t.Errorf("name = %v, want lyftr", data["name"])
+	if data["name"] != "sebu" {
+		t.Errorf("name = %v, want sebu", data["name"])
 	}
 	if data["version"] != "9.9.9" {
 		t.Errorf("version = %v, want 9.9.9", data["version"])

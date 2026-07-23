@@ -1,4 +1,4 @@
-module github.com/Cawlumm/lyftr-backend
+module github.com/Cawlumm/sebu-backend
 
 go 1.26.1
 

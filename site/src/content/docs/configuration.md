@@ -1,6 +1,6 @@
 ---
 title: Configuration
-description: Lyftr environment variables and the self-hosting gotchas.
+description: Sebu environment variables and the self-hosting gotchas.
 ---
 
 All configuration lives in a `.env` file at the project root.

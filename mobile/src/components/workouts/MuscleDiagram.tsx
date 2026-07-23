@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { View } from 'react-native'
 import Body, { type Slug } from 'react-native-body-highlighter'
-import type { Exercise } from '@lyftr/shared'
+import type { Exercise } from '@sebu/shared'
 import { muscleToBodySlugs } from '../../utils/exerciseUtils'
 import { useTheme } from '../../theme/useTheme'
 import { AppText } from '../ui'

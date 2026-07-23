@@ -7,14 +7,15 @@ export default defineConfig(({ command }) => ({
     react(),
     // Self-signed HTTPS so getUserMedia works on mobile LAN during dev.
     // Production HTTPS is handled by the reverse proxy (nginx/Caddy) — this never runs in builds.
-    ...(command === 'serve' ? [basicSsl()] : []),
+    // Disabled locally: this machine's TLS stack rejects the self-signed cert (ERR_SSL_PROTOCOL_ERROR).
+    ...(command === 'serve' && false ? [basicSsl()] : []),
   ],
   server: {
     port: 5173,
     host: true, // expose to LAN for mobile testing
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3010',
         changeOrigin: true,
       },
     },

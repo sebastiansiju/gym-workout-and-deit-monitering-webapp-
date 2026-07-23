@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ActivityIndicator, FlatList, Modal, Pressable, View } from 'react-native'
 import { AlertCircle, BookOpen, ChevronRight, Dumbbell, X } from 'lucide-react-native'
-import type { Program } from '@lyftr/shared'
+import type { Program } from '@sebu/shared'
 import { AppText, EmptyState, Field, IconButton } from '../ui'
-import { client } from '../../lib/lyftr'
+import { client } from '../../lib/sebu'
 import { useTheme } from '../../theme/useTheme'
 
 interface Props {

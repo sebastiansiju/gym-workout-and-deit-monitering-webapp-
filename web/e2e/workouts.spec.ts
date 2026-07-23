@@ -5,8 +5,8 @@ const E2E_WORKOUT_NAME = 'Test Workout E2E'
 const SEED_WORKOUT_NAME = 'Seeded Test Workout'
 const SEED_SEARCH_WORKOUT_NAME = 'ZZZ E2E SearchTarget Workout'
 const PROG_PROGRESSION_NAME = 'E2E AutoProgression Routine'
-const LAYOUT_KEY = 'lyftr_workout_layout'
-const SESSION_KEY = 'lyftr_active_session'
+const LAYOUT_KEY = 'sebu_workout_layout'
+const SESSION_KEY = 'sebu_active_session'
 
 let workoutId: number
 let searchWorkoutId: number

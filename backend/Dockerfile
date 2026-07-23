@@ -25,11 +25,11 @@ RUN apk add --no-cache ca-certificates wget
 
 WORKDIR /app
 
-COPY --from=builder /build/lyftr-api .
+COPY --from=builder /build/sebu-api .
 
 # Persistent data directory (mount a volume here)
 RUN mkdir -p /app/data
 
 EXPOSE 3000
 
-ENTRYPOINT ["/app/lyftr-api"]
+ENTRYPOINT ["/app/sebu-api"]

@@ -122,7 +122,7 @@ export function AuthScaffold({
                 </View>
                 <View>
                   <Text style={{ fontFamily: 'Outfit_800ExtraBold', fontSize: 30, letterSpacing: -0.6, color: '#fff' }}>
-                    lyftr
+                    sebu
                   </Text>
                   <Text
                     style={{

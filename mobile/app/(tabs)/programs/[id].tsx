@@ -9,10 +9,10 @@ import {
 import {
   apiErrorMessage, displayWeight, weightShort,
   type ActiveSessionExercise, type Program, type ProgramSet,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import { AppText, ConfirmSheet, Loading, Screen, deleteConfirmProps } from '../../../src/components/ui'
 import { ExerciseImage } from '../../../src/components/workouts/ExerciseImage'
-import { client, useSettingsStore, useWorkoutSession } from '../../../src/lib/lyftr'
+import { client, useSettingsStore, useWorkoutSession } from '../../../src/lib/sebu'
 import { useTheme } from '../../../src/theme/useTheme'
 import { muscleColor } from '../../../src/utils/exerciseUtils'
 

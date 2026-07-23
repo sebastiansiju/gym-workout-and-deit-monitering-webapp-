@@ -14,15 +14,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Cawlumm/lyftr-backend/middleware"
-	"github.com/Cawlumm/lyftr-backend/models"
-	"github.com/Cawlumm/lyftr-backend/utils"
+	"github.com/Cawlumm/sebu-backend/middleware"
+	"github.com/Cawlumm/sebu-backend/models"
+	"github.com/Cawlumm/sebu-backend/utils"
 	"github.com/gin-gonic/gin"
 )
 
 var offClient = &http.Client{Timeout: 5 * time.Second}
 
-const offUserAgent = "Lyftr/1.0 (https://lyftr.app; nutrition-tracker)"
+const offUserAgent = "Sebu/1.0 (https://sebu.app; nutrition-tracker)"
 
 func (h *Handler) ListFoodLogs(c *gin.Context) {
 	uid := middleware.UserID(c)

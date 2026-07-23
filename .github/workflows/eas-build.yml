@@ -138,18 +138,18 @@ jobs:
           '
 
       - name: Download the APK
-        run: curl -fL -o "lyftr-${{ github.ref_name }}.apk" "$APK_URL"
+        run: curl -fL -o "sebu-${{ github.ref_name }}.apk" "$APK_URL"
 
       - name: Attach APK to the GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: lyftr-${{ github.ref_name }}.apk
+          files: sebu-${{ github.ref_name }}.apk
           make_latest: false # separate release train; keep mobile out of the repo-wide Latest
           prerelease: true # Android betas ship as prereleases (like the web betas)
           generate_release_notes: true
           body: |
             ### Android (side-load)
-            Download `lyftr-${{ github.ref_name }}.apk` below. On your phone, open it and
+            Download `sebu-${{ github.ref_name }}.apk` below. On your phone, open it and
             allow "install from unknown sources" if prompted.
 
             > iOS is distributed via TestFlight / the App Store (Apple doesn't allow

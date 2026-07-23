@@ -3,7 +3,7 @@ package routes
 import (
 	"testing"
 
-	"github.com/Cawlumm/lyftr-backend/config"
+	"github.com/Cawlumm/sebu-backend/config"
 )
 
 func TestParseOrigins(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"strings"
 
-	"github.com/Cawlumm/lyftr-backend/models"
+	"github.com/Cawlumm/sebu-backend/models"
 )
 
 // WorkoutStore owns all SQL for workouts, workout_exercises and sets, plus the

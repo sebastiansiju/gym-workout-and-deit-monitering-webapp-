@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/Cawlumm/lyftr-backend/models"
+	"github.com/Cawlumm/sebu-backend/models"
 )
 
 // CreateWorkoutWithProgression creates a workout and, if it came from a routine,

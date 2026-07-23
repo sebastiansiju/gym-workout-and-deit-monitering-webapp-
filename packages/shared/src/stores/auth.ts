@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import * as types from '../types'
 import { StorageAdapter, STORAGE_KEYS } from '../storage'
-import { LyftrClient, apiErrorMessage } from '../client'
+import { SebuClient, apiErrorMessage } from '../client'
 
 export interface AuthStore {
   user: types.User | null
@@ -19,7 +19,7 @@ export interface AuthStore {
 // Factory — bind the store to a platform client + storage adapter. Unlike the web
 // store (synchronous localStorage read at module init), initial auth state is loaded
 // asynchronously via `hydrate()`, called once at app startup.
-export function createAuthStore(client: LyftrClient, storage: StorageAdapter) {
+export function createAuthStore(client: SebuClient, storage: StorageAdapter) {
   return create<AuthStore>((set) => ({
     user: null,
     isAuthenticated: false,

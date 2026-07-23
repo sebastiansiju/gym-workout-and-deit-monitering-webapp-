@@ -5,7 +5,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Check, Pause, Play, SkipForward } from 'lucide-react-native'
-import { useWorkoutSession } from '../../lib/lyftr'
+import { useWorkoutSession } from '../../lib/sebu'
 import { useRestTimer } from '../../hooks/useRestTimer'
 import { fmtClock, nextIncompleteSet } from '../../utils/workoutSets'
 import { AppText, IconButton } from '../ui'

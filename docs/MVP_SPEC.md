@@ -1,4 +1,4 @@
-# Lyfter MVP Specification
+# Sebu MVP Specification
 
 ## MVP Scope (Phase 1)
 

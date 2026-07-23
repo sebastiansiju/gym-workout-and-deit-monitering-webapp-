@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Image, Pressable, View } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import { ChevronRight, Flame, MoreVertical, Utensils } from 'lucide-react-native'
-import type { FoodLog } from '@lyftr/shared'
+import type { FoodLog } from '@sebu/shared'
 import { ActionSheet, AppText, ConfirmSheet, IconButton, deleteAction, deleteConfirmProps, editAction } from '../ui'
 import { useTheme } from '../../theme/useTheme'
-import { client } from '../../lib/lyftr'
+import { client } from '../../lib/sebu'
 import { MACRO_TEXT, MEAL_COLORS, MEAL_ICONS, MEAL_LABELS, type Meal } from './nutritionMeta'
 
 // Compact meal tag shown on each row now that meals share one list (icon + label in the

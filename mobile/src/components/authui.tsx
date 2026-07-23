@@ -12,9 +12,9 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import Reanimated, { useSharedValue, useAnimatedStyle, withTiming, interpolateColor } from 'react-native-reanimated'
 import { AlertCircle, Mail, Lock, Eye, EyeOff, Server, ChevronDown, LogIn, Play } from 'lucide-react-native'
-import { useServerStore } from '../lib/lyftr'
+import { useServerStore } from '../lib/sebu'
 import { useTheme } from '../theme/useTheme'
-import { testServerConnection, normalizeServerUrl } from '@lyftr/shared'
+import { testServerConnection, normalizeServerUrl } from '@sebu/shared'
 
 const FONT = {
   label: 'PlusJakartaSans_800ExtraBold',

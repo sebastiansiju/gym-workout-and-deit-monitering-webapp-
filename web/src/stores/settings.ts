@@ -2,9 +2,9 @@ import { create } from 'zustand'
 import * as types from '../types'
 import { userAPI } from '../services/api'
 
-const LAYOUT_KEY = 'lyftr_workout_layout'
-const REST_ON_KEY = 'lyftr_rest_enabled'
-const REST_SEC_KEY = 'lyftr_rest_seconds'
+const LAYOUT_KEY = 'sebu_workout_layout'
+const REST_ON_KEY = 'sebu_rest_enabled'
+const REST_SEC_KEY = 'sebu_rest_seconds'
 
 // Client-only prefs (not stored server-side) — re-applied over any backend fetch
 // so a settings GET/PUT never clobbers them.

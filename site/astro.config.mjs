@@ -4,8 +4,8 @@ import starlight from '@astrojs/starlight';
 import tailwind from '@astrojs/tailwind';
 
 // Deploys to Cloudflare Pages (served at the domain root). The workflow sets SITE_URL/SITE_BASE;
-// these defaults keep local builds root-based too. Custom domain later = set SITE_URL=https://lyftr.dev.
-const site = process.env.SITE_URL || 'https://lyftr-app.pages.dev';
+// these defaults keep local builds root-based too. Custom domain later = set SITE_URL=https://sebu.dev.
+const site = process.env.SITE_URL || 'https://sebu-app.pages.dev';
 const base = process.env.SITE_BASE ?? '/';
 const ogImage = new URL('og-image.png', site).href;
 
@@ -14,12 +14,12 @@ export default defineConfig({
   base,
   integrations: [
     starlight({
-      title: 'Lyftr',
+      title: 'Sebu',
       description:
         'Self-hosted, open-source workout & nutrition tracker — a free, no-subscription alternative to Hevy and Strong.',
       logo: { src: './src/assets/logo.svg', replacesTitle: true },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/Cawlumm/lyftr' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/Cawlumm/sebu' },
         { icon: 'discord', label: 'Discord', href: 'https://discord.gg/hfFWsrebQA' },
       ],
       customCss: ['./src/styles/starlight-brand.css'],

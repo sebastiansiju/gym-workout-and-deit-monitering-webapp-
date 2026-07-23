@@ -6,5 +6,5 @@
 set -eu
 
 go build \
-  -ldflags="-s -w -X github.com/Cawlumm/lyftr-backend/config.buildVersion=${VERSION:-dev}" \
-  -o lyftr-api .
+  -ldflags="-s -w -X github.com/Cawlumm/sebu-backend/config.buildVersion=${VERSION:-dev}" \
+  -o sebu-api .

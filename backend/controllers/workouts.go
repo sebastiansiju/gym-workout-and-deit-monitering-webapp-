@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Cawlumm/lyftr-backend/middleware"
-	"github.com/Cawlumm/lyftr-backend/models"
-	"github.com/Cawlumm/lyftr-backend/stores"
-	"github.com/Cawlumm/lyftr-backend/utils"
+	"github.com/Cawlumm/sebu-backend/middleware"
+	"github.com/Cawlumm/sebu-backend/models"
+	"github.com/Cawlumm/sebu-backend/stores"
+	"github.com/Cawlumm/sebu-backend/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )

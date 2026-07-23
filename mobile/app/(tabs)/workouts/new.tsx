@@ -5,14 +5,14 @@ import {
   AlertCircle, ArrowLeft, BookOpen, CalendarDays, Clock, Dumbbell, FileText, Plus, Zap,
 } from 'lucide-react-native'
 import type { LucideIcon } from 'lucide-react-native'
-import { apiErrorMessage, displayToLbs, weightShort, type Exercise, type Program } from '@lyftr/shared'
+import { apiErrorMessage, displayToLbs, weightShort, type Exercise, type Program } from '@sebu/shared'
 import { AppText, Button, DateInput, EmptyState, Field, IconButton, Label, Screen } from '../../../src/components/ui'
 import { ExerciseFormCard } from '../../../src/components/workouts/ExerciseFormCard'
 import { DurationField } from '../../../src/components/workouts/DurationField'
 import { ExercisePicker } from '../../../src/components/workouts/ExercisePicker'
 import { KeyboardDoneBar } from '../../../src/components/workouts/KeyboardDoneBar'
 import { ProgramPicker } from '../../../src/components/workouts/ProgramPicker'
-import { client, useSettingsStore } from '../../../src/lib/lyftr'
+import { client, useSettingsStore } from '../../../src/lib/sebu'
 import { useTheme } from '../../../src/theme/useTheme'
 
 // Same shape as web's WorkoutFormData: weights/duration in DISPLAY units here;

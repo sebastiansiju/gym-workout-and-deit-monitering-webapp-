@@ -1,17 +1,17 @@
 ---
 title: Mobile App
-description: Install the Lyftr Android app, point it at your self-hosted server, and track workouts from your phone.
+description: Install the Sebu Android app, point it at your self-hosted server, and track workouts from your phone.
 ---
 
-Lyftr has a native mobile app so you can log workouts at the gym, straight from your phone —
+Sebu has a native mobile app so you can log workouts at the gym, straight from your phone —
 talking to **your** server.
 
 ## Android
 
 1. Download the latest signed APK from the
-   [Releases](https://github.com/Cawlumm/lyftr/releases?q=mobile-v) page.
+   [Releases](https://github.com/Cawlumm/sebu/releases?q=mobile-v) page.
 2. Open the `.apk` on your phone and allow **"install from unknown sources"** if prompted.
-3. Launch Lyftr and enter your server URL when asked.
+3. Launch Sebu and enter your server URL when asked.
 
 :::note[Side-loaded builds don't auto-update]
 When a new `mobile-v*` release drops, download and install it over the old one. Store builds with

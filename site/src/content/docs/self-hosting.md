@@ -1,17 +1,17 @@
 ---
 title: Self-Hosting
-description: Run your own Lyftr instance in one Docker command — on a VPS, Raspberry Pi, or NAS.
+description: Run your own Sebu instance in one Docker command — on a VPS, Raspberry Pi, or NAS.
 ---
 
-Lyftr runs anywhere Docker does. No clone, no build, no Go install — just Docker.
+Sebu runs anywhere Docker does. No clone, no build, no Go install — just Docker.
 
 ## Quick start
 
 Download the compose file and an env template:
 
 ```bash
-curl -o docker-compose.yml https://raw.githubusercontent.com/Cawlumm/lyftr/main/docker-compose.yml
-curl -o .env https://raw.githubusercontent.com/Cawlumm/lyftr/main/.env.example
+curl -o docker-compose.yml https://raw.githubusercontent.com/Cawlumm/sebu/main/docker-compose.yml
+curl -o .env https://raw.githubusercontent.com/Cawlumm/sebu/main/.env.example
 ```
 
 Edit `.env` and set a strong `JWT_SECRET` (32+ characters), then pull the prebuilt images and
@@ -31,7 +31,7 @@ them so nothing is built locally — you don't need the source code, just the co
 :::
 
 :::tip[Exercise library]
-On first startup Lyftr seeds **800+ exercises** from
+On first startup Sebu seeds **800+ exercises** from
 [free-exercise-db](https://github.com/yuhonas/free-exercise-db) in the background — no API key, no
 setup. They appear in the UI within a few seconds.
 :::

@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/Cawlumm/lyftr-backend/utils"
+	"github.com/Cawlumm/sebu-backend/utils"
 )
 
 func DemoUser(db *sql.DB) {
 	var count int
-	db.QueryRow(`SELECT COUNT(*) FROM users WHERE email = ?`, "demo@lyftr.local").Scan(&count)
+	db.QueryRow(`SELECT COUNT(*) FROM users WHERE email = ?`, "demo@sebu.local").Scan(&count)
 	if count > 0 {
 		return
 	}
@@ -20,7 +20,7 @@ func DemoUser(db *sql.DB) {
 		return
 	}
 
-	res, err := db.Exec(`INSERT INTO users (email, password_hash) VALUES (?, ?)`, "demo@lyftr.local", hash)
+	res, err := db.Exec(`INSERT INTO users (email, password_hash) VALUES (?, ?)`, "demo@sebu.local", hash)
 	if err != nil {
 		log.Printf("seed: failed to create demo user: %v", err)
 		return
@@ -28,5 +28,5 @@ func DemoUser(db *sql.DB) {
 
 	userID, _ := res.LastInsertId()
 	db.Exec(`INSERT INTO user_settings (user_id) VALUES (?)`, userID)
-	log.Println("seed: demo user created (demo@lyftr.local / password123)")
+	log.Println("seed: demo user created (demo@sebu.local / password123)")
 }

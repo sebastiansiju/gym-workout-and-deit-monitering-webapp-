@@ -1,14 +1,14 @@
 ---
 title: Backups & Updates
-description: Back up your Lyftr data (a single SQLite file) and update to the latest version safely.
+description: Back up your Sebu data (a single SQLite file) and update to the latest version safely.
 ---
 
-All of your Lyftr data — workouts, programs, weight, nutrition — lives in **one SQLite file**.
+All of your Sebu data — workouts, programs, weight, nutrition — lives in **one SQLite file**.
 Backing up is copying that file. Updating is pulling the latest image. Your data survives both.
 
 ## Where your data lives
 
-The database is stored on a Docker volume and mounted at `./data/lyftr.db` next to your
+The database is stored on a Docker volume and mounted at `./data/sebu.db` next to your
 `docker-compose.yml`. That single file *is* your instance.
 
 ## Back up
@@ -16,14 +16,14 @@ The database is stored on a Docker volume and mounted at `./data/lyftr.db` next 
 Copy the database file. For a personal instance with little write traffic, a live copy is fine:
 
 ```bash
-cp ./data/lyftr.db ./data/lyftr.db.backup
+cp ./data/sebu.db ./data/sebu.db.backup
 ```
 
 For a guaranteed-consistent copy (e.g. right before an update), stop the stack first, then copy:
 
 ```bash
 docker compose down
-cp ./data/lyftr.db ./data/lyftr.db.backup
+cp ./data/sebu.db ./data/sebu.db.backup
 docker compose up -d
 ```
 
@@ -32,8 +32,8 @@ docker compose up -d
 A nightly backup keeping the last 7 days:
 
 ```bash
-0 3 * * * cp /path/to/lyftr/data/lyftr.db /path/to/backups/lyftr-$(date +\%F).db && \
-  find /path/to/backups -name 'lyftr-*.db' -mtime +7 -delete
+0 3 * * * cp /path/to/sebu/data/sebu.db /path/to/backups/sebu-$(date +\%F).db && \
+  find /path/to/backups -name 'sebu-*.db' -mtime +7 -delete
 ```
 
 ## Restore
@@ -42,7 +42,7 @@ Stop the stack, drop the backup in place, start again:
 
 ```bash
 docker compose down
-cp ./data/lyftr.db.backup ./data/lyftr.db
+cp ./data/sebu.db.backup ./data/sebu.db
 docker compose up -d
 ```
 

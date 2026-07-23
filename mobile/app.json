@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Lyftr",
-    "slug": "lyftr",
-    "scheme": "lyftr",
+    "name": "Sebu",
+    "slug": "sebu",
+    "scheme": "sebu",
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -14,13 +14,13 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "local.lyftr.app",
+      "bundleIdentifier": "local.sebu.app",
       "infoPlist": {
-        "NSCameraUsageDescription": "Lyftr uses the camera to scan food barcodes so you can log nutrition quickly."
+        "NSCameraUsageDescription": "Sebu uses the camera to scan food barcodes so you can log nutrition quickly."
       }
     },
     "android": {
-      "package": "local.lyftr.app",
+      "package": "local.sebu.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0d1629"
@@ -40,7 +40,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Lyftr uses the camera to scan food barcodes so you can log nutrition quickly.",
+          "cameraPermission": "Sebu uses the camera to scan food barcodes so you can log nutrition quickly.",
           "recordAudioAndroid": false
         }
       ],

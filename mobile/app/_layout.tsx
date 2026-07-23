@@ -13,7 +13,7 @@ import {
   PlusJakartaSans_700Bold,
   PlusJakartaSans_800ExtraBold,
 } from '@expo-google-fonts/plus-jakarta-sans'
-import { useAuthStore, useServerStore, useThemeStore, useWorkoutSession } from '../src/lib/lyftr'
+import { useAuthStore, useServerStore, useThemeStore, useWorkoutSession } from '../src/lib/sebu'
 import { useTheme } from '../src/theme/useTheme'
 import { Loading } from '../src/components/ui'
 import { WorkoutSessionLayer } from '../src/components/workouts/WorkoutSessionLayer'

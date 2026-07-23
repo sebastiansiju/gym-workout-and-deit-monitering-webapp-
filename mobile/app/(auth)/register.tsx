@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import { Link } from 'expo-router'
 import { AuthScaffold } from '../../src/components/AuthScaffold'
 import { IconInput, GradientButton, AuthError, ServerRow, Footer } from '../../src/components/authui'
-import { useAuthStore } from '../../src/lib/lyftr'
+import { useAuthStore } from '../../src/lib/sebu'
 import { useTheme } from '../../src/theme/useTheme'
 
 // Same intent as the web's <input type=email required>: a lightweight shape check,

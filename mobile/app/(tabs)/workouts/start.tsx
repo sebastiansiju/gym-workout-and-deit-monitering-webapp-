@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native'
 import { router } from 'expo-router'
 import { ArrowLeft, BookOpen, ChevronRight, Play, Timer, Trash2, Zap } from 'lucide-react-native'
-import type { ActiveSessionExercise, Program } from '@lyftr/shared'
+import type { ActiveSessionExercise, Program } from '@sebu/shared'
 import { AppText, IconButton, Screen } from '../../../src/components/ui'
-import { client, useWorkoutSession } from '../../../src/lib/lyftr'
+import { client, useWorkoutSession } from '../../../src/lib/sebu'
 import { useTheme } from '../../../src/theme/useTheme'
 
 // Port of web/pages/StartWorkout.tsx. Quick-start (blank), start-from-program, and a

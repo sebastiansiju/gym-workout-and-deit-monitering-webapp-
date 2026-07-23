@@ -1,8 +1,8 @@
-# Lyfter - Project Context & Guidelines
+# Sebu - Project Context & Guidelines
 
 ## Project Overview
 
-**Lyfter** is a self-hosted workout tracking app similar to MacroFactor. Users run both UI and backend on their own servers for complete data privacy and control. The app is designed as a mobile-first experience (iOS/Android app store) with a web interface as a secondary option.
+**Sebu** is a self-hosted workout tracking app similar to MacroFactor. Users run both UI and backend on their own servers for complete data privacy and control. The app is designed as a mobile-first experience (iOS/Android app store) with a web interface as a secondary option.
 
 ### Key Principles
 1. **Self-Hosted First**: SQLite default, zero external cloud dependencies
@@ -39,7 +39,7 @@ Deployment:
 ## Project Structure
 
 ```
-lyftr/
+sebu/
 ├── backend/               # Go/Gin API service
 │   ├── main.go           # Entry point
 │   ├── routes/
@@ -115,7 +115,7 @@ See MVP_SPEC.md for complete list. Priority features:
 - **Error handling**: Validate at API boundaries, trust internal code
 
 ### Database
-- SQLite by default (auto-created at `./data/lyfter.db`)
+- SQLite by default (auto-created at `./data/sebu.db`)
 - All queries scoped to authenticated user (user_id required)
 - Indexes on: user_id, date (for range queries)
 - Migrations tracked in ./backend/src/db/migrations/
@@ -204,7 +204,7 @@ docker-compose up -d
 docker-compose logs -f backend
 
 # Reset database
-rm data/lyfter.db
+rm data/sebu.db
 docker-compose restart backend
 
 # Run backend tests
@@ -226,16 +226,16 @@ cd mobile && npm start
 # Run on startup automatically
 
 # Reset database (careful!)
-rm data/lyfter.db && docker-compose restart backend
+rm data/sebu.db && docker-compose restart backend
 
 # View database with sqlite3
-sqlite3 data/lyfter.db ".schema"
+sqlite3 data/sebu.db ".schema"
 ```
 
 ### Deployment
 ```bash
 # Build Go binary
-cd backend && go build -o lyfter-api
+cd backend && go build -o sebu-api
 
 # Build Docker images
 docker-compose build
@@ -244,7 +244,7 @@ docker-compose build
 docker-compose -f docker-compose.prod.yml up -d
 
 # Users can also run standalone binary
-./lyfter-api --port=3000 --db-type=sqlite
+./sebu-api --port=3000 --db-type=sqlite
 ```
 
 ---
@@ -279,7 +279,7 @@ Don't over-engineer. Stay pragmatic. Iterate based on real constraints, not hypo
 
 ## Known Limitations (MVP)
 
-- Single user per Lyfter instance (can add multi-user later)
+- Single user per Sebu instance (can add multi-user later)
 - No image uploads (meal photos, progress pics)
 - No offline mode (always online)
 - No background sync
@@ -308,7 +308,7 @@ These are deliberate scope cuts to ship MVP faster. Add in Phase 2+.
 ## Deployment Target
 
 **Primary:** Self-hosted Docker on user's server (Raspberry Pi, NAS, VPS, etc.)
-**Secondary:** Web browser at their domain (e.g., lyfter.home.local:5173)
+**Secondary:** Web browser at their domain (e.g., sebu.home.local:5173)
 **Mobile:** App store (TestFlight for beta, App Store/Play Store for release)
 
 Users should deploy behind reverse proxy (nginx) with SSL certificate.

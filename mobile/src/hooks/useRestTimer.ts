@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useWorkoutSession } from '../lib/lyftr'
+import { useWorkoutSession } from '../lib/sebu'
 import { useCountdown } from './useCountdown'
 
 // Port of web/src/hooks/useRestTimer.ts (import points at the mobile store).

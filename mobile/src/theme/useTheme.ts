@@ -1,4 +1,4 @@
-import { useThemeStore } from '../lib/lyftr'
+import { useThemeStore } from '../lib/sebu'
 import { palettes, brand } from './theme'
 
 // One hook for all theming: current mode, the resolved color palette (for inline styles

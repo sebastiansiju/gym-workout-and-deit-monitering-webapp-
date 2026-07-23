@@ -19,11 +19,11 @@ import {
   type Exercise,
   type ExerciseHistoryPoint,
   type PersonalRecord,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import { AppText, Screen, SegmentedControl } from '../ui'
 import { MuscleDiagram } from './MuscleDiagram'
 import { ExerciseHistoryChart, type ChartPoint } from './ExerciseHistoryChart'
-import { client, useSettingsStore, useWorkoutSession } from '../../lib/lyftr'
+import { client, useSettingsStore, useWorkoutSession } from '../../lib/sebu'
 import { useTheme } from '../../theme/useTheme'
 import { muscleColor, EQUIPMENT_LABEL } from '../../utils/exerciseUtils'
 

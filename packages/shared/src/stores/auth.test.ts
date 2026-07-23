@@ -1,17 +1,17 @@
 import { createAuthStore } from './auth'
 import { createMemoryStorage } from '../testing/memoryStorage'
 import { STORAGE_KEYS } from '../storage'
-import type { LyftrClient } from '../client'
+import type { SebuClient } from '../client'
 import type { AuthResponse } from '../types'
 
 const fakeAuthResponse: AuthResponse = {
   token: 'access-123',
   refresh_token: 'refresh-456',
-  user: { id: 1, email: 'demo@lyftr.local', created_at: '2026-01-01T00:00:00Z' },
+  user: { id: 1, email: 'demo@sebu.local', created_at: '2026-01-01T00:00:00Z' },
 }
 
 // Minimal fake client — only the auth endpoints the store touches.
-function fakeClient(overrides: Partial<AuthResponse> = {}, shouldFail = false): LyftrClient {
+function fakeClient(overrides: Partial<AuthResponse> = {}, shouldFail = false): SebuClient {
   const impl = async () => {
     if (shouldFail) {
       const err: any = new Error('bad creds')
@@ -20,7 +20,7 @@ function fakeClient(overrides: Partial<AuthResponse> = {}, shouldFail = false): 
     }
     return { ...fakeAuthResponse, ...overrides }
   }
-  return { authAPI: { login: impl, register: impl } } as unknown as LyftrClient
+  return { authAPI: { login: impl, register: impl } } as unknown as SebuClient
 }
 
 describe('auth store (storage-adapter DI)', () => {
@@ -28,11 +28,11 @@ describe('auth store (storage-adapter DI)', () => {
     const storage = createMemoryStorage()
     const useAuth = createAuthStore(fakeClient(), storage)
 
-    await useAuth.getState().login('demo@lyftr.local', 'password123')
+    await useAuth.getState().login('demo@sebu.local', 'password123')
 
     const state = useAuth.getState()
     expect(state.isAuthenticated).toBe(true)
-    expect(state.user?.email).toBe('demo@lyftr.local')
+    expect(state.user?.email).toBe('demo@sebu.local')
     expect(await storage.get(STORAGE_KEYS.access)).toBe('access-123')
     expect(await storage.get(STORAGE_KEYS.refresh)).toBe('refresh-456')
     expect(JSON.parse((await storage.get(STORAGE_KEYS.user))!).id).toBe(1)
@@ -52,7 +52,7 @@ describe('auth store (storage-adapter DI)', () => {
   it('logout clears storage and state', async () => {
     const storage = createMemoryStorage()
     const useAuth = createAuthStore(fakeClient(), storage)
-    await useAuth.getState().login('demo@lyftr.local', 'password123')
+    await useAuth.getState().login('demo@sebu.local', 'password123')
 
     await useAuth.getState().logout()
 
@@ -74,6 +74,6 @@ describe('auth store (storage-adapter DI)', () => {
     const state = useAuth.getState()
     expect(state.isHydrated).toBe(true)
     expect(state.isAuthenticated).toBe(true)
-    expect(state.user?.email).toBe('demo@lyftr.local')
+    expect(state.user?.email).toBe('demo@sebu.local')
   })
 })

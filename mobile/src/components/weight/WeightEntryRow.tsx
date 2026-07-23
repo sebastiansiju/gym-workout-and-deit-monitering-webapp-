@@ -4,10 +4,10 @@ import { router } from 'expo-router'
 import { format, parseISO } from 'date-fns'
 import * as Haptics from 'expo-haptics'
 import { ChevronRight, MoreVertical, Scale, TrendingDown, TrendingUp } from 'lucide-react-native'
-import { displayWeight, weightShort, type WeightLog } from '@lyftr/shared'
+import { displayWeight, weightShort, type WeightLog } from '@sebu/shared'
 import { ActionSheet, AppText, Card, ConfirmSheet, IconButton, deleteAction, deleteConfirmProps, editAction } from '../ui'
 import { useTheme } from '../../theme/useTheme'
-import { client } from '../../lib/lyftr'
+import { client } from '../../lib/sebu'
 
 interface Props {
   item: WeightLog

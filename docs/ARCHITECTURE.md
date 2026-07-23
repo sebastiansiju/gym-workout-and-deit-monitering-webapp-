@@ -1,4 +1,4 @@
-# Lyfter Architecture
+# Sebu Architecture
 
 ## System Overview
 
@@ -83,8 +83,8 @@ Tech Stack:
 ### Database Layer
 ```
 Default SQLite Config:
-- File: lyfter.db (auto-created)
-- Location: ./data/lyfter.db (mounted volume)
+- File: sebu.db (auto-created)
+- Location: ./data/sebu.db (mounted volume)
 - No external dependencies
 - Automatic backups via Docker volume
 
@@ -164,7 +164,7 @@ services:
       - ./logs:/app/logs
     environment:
       - DB_TYPE=sqlite
-      - DB_PATH=/app/data/lyfter.db
+      - DB_PATH=/app/data/sebu.db
 
   web:
     build: ./web
@@ -185,14 +185,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=lyfter
+      - POSTGRES_DB=sebu
       - POSTGRES_PASSWORD=<password>
 
   backend:
     environment:
       - DB_TYPE=postgres
       - DB_HOST=db
-      - DB_NAME=lyfter
+      - DB_NAME=sebu
       - DB_PASSWORD=<password>
 
 volumes:

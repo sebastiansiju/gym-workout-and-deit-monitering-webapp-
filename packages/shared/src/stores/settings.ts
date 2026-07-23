@@ -1,12 +1,12 @@
 import { create } from 'zustand'
 import * as types from '../types'
 import { StorageAdapter } from '../storage'
-import { LyftrClient } from '../client'
+import { SebuClient } from '../client'
 
 // Client-only pref keys (device storage, not server-side).
-const LAYOUT_KEY = 'lyftr_workout_layout'
-const REST_ON_KEY = 'lyftr_rest_enabled'
-const REST_SEC_KEY = 'lyftr_rest_seconds'
+const LAYOUT_KEY = 'sebu_workout_layout'
+const REST_ON_KEY = 'sebu_rest_enabled'
+const REST_SEC_KEY = 'sebu_rest_seconds'
 
 type ClientPrefs = Pick<types.UserSettings, 'workout_layout' | 'rest_enabled' | 'rest_seconds_default'>
 
@@ -48,7 +48,7 @@ export interface SettingsStore {
   reset: () => void
 }
 
-export function createSettingsStore(client: LyftrClient, storage: StorageAdapter) {
+export function createSettingsStore(client: SebuClient, storage: StorageAdapter) {
   return create<SettingsStore>((set, get) => ({
     settings: BASE_DEFAULTS,
     loaded: false,

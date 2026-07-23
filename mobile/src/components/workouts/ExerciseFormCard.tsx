@@ -1,7 +1,7 @@
 import { memo, useRef, useState } from 'react'
 import { Pressable, Text, TextInput, View } from 'react-native'
 import { FileText, Plus, Timer, Trash2, X } from 'lucide-react-native'
-import type { Exercise } from '@lyftr/shared'
+import type { Exercise } from '@sebu/shared'
 import { AppText, IconButton, Label } from '../ui'
 import { ExerciseImage } from './ExerciseImage'
 import { RestPicker } from './RestPicker'

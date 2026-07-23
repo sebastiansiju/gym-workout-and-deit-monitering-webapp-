@@ -10,7 +10,7 @@ import {
 import {
   apiErrorMessage, dayToIsoNoon, displayToLbs, displayWeight, isoToDayInput, maxWeight, todayStr,
   weightError, weightShort, type WeightLog, type WeightStats,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import {
   AppText, Button, Card, DateInput, Field, Label, NumberField, NumericKeyboardAccessory,
   NUMERIC_ACCESSORY_ID, PageHeader, Screen, SegmentedControl, StepperTile,
@@ -19,7 +19,7 @@ import { ExerciseHistoryChart, type ChartPoint } from '../../../src/components/w
 import { WeightEntryRow } from '../../../src/components/weight/WeightEntryRow'
 import { WeightSkeleton } from '../../../src/components/weight/WeightSkeleton'
 import { useServerInfiniteList } from '../../../src/hooks/useServerInfiniteList'
-import { client, useSettingsStore } from '../../../src/lib/lyftr'
+import { client, useSettingsStore } from '../../../src/lib/sebu'
 import { clampStep } from '../../../src/utils/number'
 import { useTheme } from '../../../src/theme/useTheme'
 

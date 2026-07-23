@@ -12,7 +12,7 @@ import {
 import {
   displayVolume, displayWeight, weightShort,
   type DailyStats, type WeightLog, type WeightStats, type Workout,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import { AppText, Card, Label, Screen, SectionHeader, SegmentedControl } from '../../src/components/ui'
 import { ExerciseImage } from '../../src/components/workouts/ExerciseImage'
 import {
@@ -20,7 +20,7 @@ import {
 } from '../../src/components/dashboard/DashboardCharts'
 import { QuickWeighInSheet } from '../../src/components/dashboard/QuickWeighInSheet'
 import { DashboardSkeleton } from '../../src/components/dashboard/DashboardSkeleton'
-import { client, useAuthStore, useSettingsStore, useWorkoutSession } from '../../src/lib/lyftr'
+import { client, useAuthStore, useSettingsStore, useWorkoutSession } from '../../src/lib/sebu'
 import { muscleColor } from '../../src/utils/exerciseUtils'
 import { useTheme } from '../../src/theme/useTheme'
 

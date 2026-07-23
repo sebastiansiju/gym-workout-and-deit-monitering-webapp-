@@ -8,10 +8,10 @@ import {
 import {
   apiErrorMessage, displayVolume, displayWeight, weightShort,
   type Workout, type Set as WorkoutSet,
-} from '@lyftr/shared'
+} from '@sebu/shared'
 import { AppText, ConfirmSheet, Loading, Screen, deleteConfirmProps } from '../../../src/components/ui'
 import { ExerciseImage } from '../../../src/components/workouts/ExerciseImage'
-import { client, useSettingsStore } from '../../../src/lib/lyftr'
+import { client, useSettingsStore } from '../../../src/lib/sebu'
 import { useTheme } from '../../../src/theme/useTheme'
 import { muscleColor } from '../../../src/utils/exerciseUtils'
 

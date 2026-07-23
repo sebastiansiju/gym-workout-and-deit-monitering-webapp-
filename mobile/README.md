@@ -1,13 +1,13 @@
-# Lyftr Mobile (React Native + Expo)
+# Sebu Mobile (React Native + Expo)
 
-Universal (iOS + iPad + Android) app for Lyftr. Shares its logic — types, API client,
-Zustand stores — with the web app via [`@lyftr/shared`](../packages/shared). UI is native
+Universal (iOS + iPad + Android) app for Sebu. Shares its logic — types, API client,
+Zustand stores — with the web app via [`@sebu/shared`](../packages/shared). UI is native
 (SwiftUI/Kotlin-backed RN primitives), styled with NativeWind.
 
 ## Stack
 - **Expo (SDK 52)** + **expo-router** (file-based routes in `app/`)
 - **NativeWind** (Tailwind for RN) — tokens ported from the web `tailwind.config.ts`
-- **@lyftr/shared** — the platform-agnostic core (storage-injected)
+- **@sebu/shared** — the platform-agnostic core (storage-injected)
 - **expo-secure-store** (tokens → Keychain) + **AsyncStorage** (prefs)
 - **react-native-svg** (charts), **lucide-react-native** (icons)
 - **expo-camera** (barcode, later), **expo-haptics** (rest timer, later)
@@ -33,7 +33,7 @@ Mac only) / `a` (Android emulator).
 The **Server URL** field in the Settings tab configures the backend origin (validated via
 `GET /api/v1/info`). Leave blank for the default. For the VM dev backend use the LAN IP or
 the Tailscale URL, e.g. `https://claude-code.tail2b1098.ts.net:3000`. Demo login:
-`demo@lyftr.local` / `password123`.
+`demo@sebu.local` / `password123`.
 
 ## MVP scope (this PR)
 Auth (login/register) → Dashboard summary → Weight (log / list / delete + trend chart).

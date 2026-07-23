@@ -10,8 +10,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Cawlumm/lyftr-backend/db"
-	"github.com/Cawlumm/lyftr-backend/stores"
+	"github.com/Cawlumm/sebu-backend/db"
+	"github.com/Cawlumm/sebu-backend/stores"
 	"github.com/gin-gonic/gin"
 	_ "modernc.org/sqlite"
 )

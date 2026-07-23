@@ -3,11 +3,11 @@ import { Text, View, Linking } from 'react-native'
 import { Link } from 'expo-router'
 import { AuthScaffold } from '../../src/components/AuthScaffold'
 import { IconInput, GradientButton, SecondaryButton, AuthDivider, AuthError, ServerRow, Footer } from '../../src/components/authui'
-import { useAuthStore } from '../../src/lib/lyftr'
+import { useAuthStore } from '../../src/lib/sebu'
 import { useTheme } from '../../src/theme/useTheme'
 
 // Public hosted demo (Fly) — the "Try demo account" button opens it in the browser.
-const DEMO_URL = 'https://lyftr-demo.fly.dev'
+const DEMO_URL = 'https://sebu-demo.fly.dev'
 
 // Same intent as the web's <input type=email required>: a lightweight shape check,
 // not RFC validation — the server has the final say.

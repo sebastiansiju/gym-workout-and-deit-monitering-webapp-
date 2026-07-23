@@ -6,7 +6,7 @@ import { format, subDays, addDays } from 'date-fns'
 import {
   AlertCircle, CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Flame, Plus, Utensils,
 } from 'lucide-react-native'
-import { todayStr, type DailyStats, type FoodLog } from '@lyftr/shared'
+import { todayStr, type DailyStats, type FoodLog } from '@sebu/shared'
 import {
   AppText, Card, DateInput, IconButton, Label, PageHeader, Screen, SearchField, SectionHeader, SegmentedControl, Toast,
 } from '../../../src/components/ui'
@@ -14,7 +14,7 @@ import { MacroRing, MacroHistoryChart, type MacroHistoryPoint } from '../../../s
 import { FoodEntryRow } from '../../../src/components/nutrition/FoodEntryRow'
 import { NutritionSkeleton } from '../../../src/components/nutrition/NutritionSkeleton'
 import { MACRO_COLORS, MEALS, type Meal } from '../../../src/components/nutrition/nutritionMeta'
-import { client, useSettingsStore } from '../../../src/lib/lyftr'
+import { client, useSettingsStore } from '../../../src/lib/sebu'
 import { useTheme } from '../../../src/theme/useTheme'
 
 const HISTORY_PERIODS = ['7d', '30d', '90d'] as const

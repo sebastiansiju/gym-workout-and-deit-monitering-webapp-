@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Cawlumm/lyftr-backend/config"
+	"github.com/Cawlumm/sebu-backend/config"
 	_ "modernc.org/sqlite"
 )
 
